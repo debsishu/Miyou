@@ -46,7 +46,7 @@ function Search({ isActive, setIsActive }) {
           <input
             type="text"
             required
-            placeholder={"Enter the title"}
+            placeholder={"Enter the name of the anime"}
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);

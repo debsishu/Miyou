@@ -66,24 +66,17 @@ function WatchAnime() {
             <p>If the video doesn't load please refresh the page</p>
           </Suggestion>
           <div>
-            <iframe
-              title={episodeLinks[0].title}
-              src={currentServer}
-              allowfullscreen="true"
-              frameborder="0"
-              marginwidth="0"
-              marginheight="0"
-              scrolling="no"
-              style={{
-                width: "100%",
-                height: "96vh",
-                outline: "none",
-                borderRadius: "0.5rem",
-                boxShadow: "0px 4.41109px 20.291px rgba(16, 16, 24, 0.81)",
-                marginBottom: "1rem",
-              }}
-            ></iframe>
-
+            <IframeWrapper>
+              <iframe
+                title={episodeLinks[0].title}
+                src={currentServer}
+                allowfullscreen="true"
+                frameborder="0"
+                marginwidth="0"
+                marginheight="0"
+                scrolling="no"
+              ></iframe>
+            </IframeWrapper>
             <EpisodeButtons>
               <IconContext.Provider
                 value={{
@@ -146,120 +139,122 @@ function WatchAnime() {
               </IconContext.Provider>
             </EpisodeButtons>
             <ServerWrapper>
-              <p>Choose any other server from below, if you suffer buffering</p>
-              <div>
-                {episodeLinks[0].vidstreaming !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].vidstreaming);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].vidstreaming
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    VIDSTREAMING
-                  </button>
-                )}
-                {episodeLinks[0].streamsb !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].streamsb);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].streamsb
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    STREAMSB
-                  </button>
-                )}
-                {episodeLinks[0].gogoserver !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].gogoserver);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].gogoserver
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    GOGOSERVER
-                  </button>
-                )}
-                {episodeLinks[0].xstreamcdn !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].xstreamcdn);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].xstreamcdn
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    XSTREAMCDN
-                  </button>
-                )}
-                {episodeLinks[0].mixdrop !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].mixdrop);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].mixdrop
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    MIXDROP
-                  </button>
-                )}
-                {episodeLinks[0].mp4upload !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].mp4upload);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].mp4upload
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    MP4UPLOAD
-                  </button>
-                )}
-                {episodeLinks[0].doodstream !== null && (
-                  <button
-                    onClick={() => {
-                      setCurrentServer(episodeLinks[0].doodstream);
-                    }}
-                    style={
-                      currentServer === episodeLinks[0].doodstream
-                        ? {
-                            backgroundColor: "#7676ff",
-                          }
-                        : {}
-                    }
-                  >
-                    DOODSTREAM
-                  </button>
-                )}
+              <div className="server-wrapper">
+                <p>Servers List</p>
+                <div className="serverlinks">
+                  {episodeLinks[0].vidstreaming !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].vidstreaming);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].vidstreaming
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      VIDSTREAMING
+                    </button>
+                  )}
+                  {episodeLinks[0].streamsb !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].streamsb);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].streamsb
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      STREAMSB
+                    </button>
+                  )}
+                  {episodeLinks[0].gogoserver !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].gogoserver);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].gogoserver
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      GOGOSERVER
+                    </button>
+                  )}
+                  {episodeLinks[0].xstreamcdn !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].xstreamcdn);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].xstreamcdn
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      XSTREAMCDN
+                    </button>
+                  )}
+                  {episodeLinks[0].mixdrop !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].mixdrop);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].mixdrop
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      MIXDROP
+                    </button>
+                  )}
+                  {episodeLinks[0].mp4upload !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].mp4upload);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].mp4upload
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      MP4UPLOAD
+                    </button>
+                  )}
+                  {episodeLinks[0].doodstream !== null && (
+                    <button
+                      onClick={() => {
+                        setCurrentServer(episodeLinks[0].doodstream);
+                      }}
+                      style={
+                        currentServer === episodeLinks[0].doodstream
+                          ? {
+                              backgroundColor: "#7676ff",
+                            }
+                          : {}
+                      }
+                    >
+                      DOODSTREAM
+                    </button>
+                  )}
+                </div>
               </div>
             </ServerWrapper>
             <EpisodesWrapper>
@@ -286,6 +281,27 @@ function WatchAnime() {
     </Wrapper>
   );
 }
+
+const IframeWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%; /* proportion value to aspect ratio 16:9 (9 / 16 = 0.5625 or 56.25%) */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.6);
+  background-image: url("https://i.ibb.co/28yS92Z/If-the-video-does-not-load-please-refresh-the-page.png");
+  background-repeat: no-repeat;
+  background-position: center;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 const EpisodesWrapper = styled.div`
   margin-top: 1rem;
@@ -332,20 +348,24 @@ const ServerWrapper = styled.div`
     color: white;
     font-size: 1.4rem;
     font-family: "Gilroy-Medium", sans-serif;
+    text-decoration: underline;
   }
 
-  div {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    grid-gap: 1rem;
-    grid-row-gap: 1rem;
-    justify-content: space-between;
-    margin-top: 1rem;
+  .server-wrapper {
     padding: 1rem;
     background-color: #1a1927;
     border: 1px solid #272639;
     border-radius: 0.4rem;
     box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81);
+  }
+
+  .serverlinks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-gap: 1rem;
+    grid-row-gap: 1rem;
+    justify-content: space-between;
+    margin-top: 1rem;
   }
 
   button {

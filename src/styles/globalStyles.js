@@ -18,8 +18,9 @@ const GlobalStyle = createGlobalStyle`
 	}
 
 	::placeholder {
-    color: #c5c5c5;
-  }
+		color: black;
+		opacity: 0.3;
+	}
 
 	.swiper-pagination-bullet-active {
     background-color: #6969FF !important;
