@@ -62,9 +62,6 @@ function WatchAnime() {
               </a>
             </IconContext.Provider>
           </Titles>
-          <Suggestion>
-            <p>If the video doesn't load please refresh the page</p>
-          </Suggestion>
           <div>
             <IframeWrapper>
               <iframe
@@ -383,13 +380,6 @@ const ServerWrapper = styled.div`
 
 const Wrapper = styled.div`
   margin: 2rem 5rem 2rem 5rem;
-`;
-
-const Suggestion = styled.div`
-  color: #b5c3de;
-  font-size: 1rem;
-  font-family: "Gilroy-Regular", sans-serif;
-  margin-bottom: 1rem;
 `;
 
 const EpisodeButtons = styled.div`
