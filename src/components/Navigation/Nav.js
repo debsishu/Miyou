@@ -1,0 +1,85 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { FiSearch } from "react-icons/fi";
+import { IconContext } from "react-icons";
+import Search from "./Search";
+
+function Nav() {
+  const [isActive, setIsActive] = useState(false);
+
+  return (
+    <div>
+      <NavBar>
+        <Link to="/">
+          <img src="./assets/logo.svg" alt="Logo Here" />
+        </Link>
+        <div>
+          <Links to="/trending">Trending</Links>
+          <Links to="/popular">Popular</Links>
+          <Links to="/favourites">Favourites</Links>
+          <Links to="/top100">Top 100 Anime</Links>
+        </div>
+        <IconContext.Provider
+          value={{
+            size: "1rem",
+            style: {
+              verticalAlign: "middle",
+              marginBottom: "0.2rem",
+              marginRight: "0.3rem",
+            },
+          }}
+        >
+          <Button onClick={(e) => setIsActive(!isActive)}>
+            <FiSearch />
+            Search
+          </Button>
+        </IconContext.Provider>
+      </NavBar>
+      {isActive && <Search isActive={isActive} setIsActive={setIsActive} />}
+      {isActive && <Shadow></Shadow>}
+    </div>
+  );
+}
+
+const Shadow = styled.div`
+  z-index: 9;
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 98.6vw;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+`;
+
+const Button = styled.button`
+  color: white;
+  font-family: "Gilroy-Bold", sans-serif;
+  background-color: #7676ff;
+  outline: none;
+  border: none;
+  padding: 0.7rem 1.6rem 0.7rem 1.6rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  FiSearch {
+    font-size: 1rem;
+  }
+  white-space: nowrap;
+`;
+
+const Links = styled(Link)`
+  color: white;
+  font-family: "Gilroy-Medium", sans-serif;
+  text-decoration: none;
+  margin: 0rem 1.3rem 0 1.3rem;
+`;
+
+const NavBar = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.8rem 5rem 0 5rem;
+`;
+
+export default Nav;
