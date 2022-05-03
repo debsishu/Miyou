@@ -26,6 +26,7 @@ function WatchAnime() {
     setLoading(false);
     setEpisodeLinks(res.data);
     setCurrentServer(res.data[0].vidstreaming);
+    window.scrollTo(0, 0);
   }
 
   return (
