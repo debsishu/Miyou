@@ -7,7 +7,6 @@ import { IconContext } from "react-icons";
 
 function Search({ isActive, setIsActive }) {
   const [title, setTitle] = useState("");
-  console.log(isActive);
   return (
     <Wrapper>
       <CloseButton>
@@ -48,6 +47,7 @@ function Search({ isActive, setIsActive }) {
             required
             placeholder={"Enter the name of the anime"}
             value={title}
+            autoFocus
             onChange={(e) => {
               setTitle(e.target.value);
             }}

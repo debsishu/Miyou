@@ -2,90 +2,97 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
+import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
 
 function AnimeDetails() {
   let slug = useParams().slug;
   const [animeDetails, setAnimeDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getAnimeDetails();
   }, []);
 
   async function getAnimeDetails() {
+    setLoading(true);
     let res = await axios.get(
       `https://miyou-api.herokuapp.com/api/getanime?link=/category/${slug}`
     );
+    setLoading(false);
     setAnimeDetails(res.data);
   }
   return (
     <div>
-      <Content>
-        {animeDetails.length > 0 && (
-          <div>
-            <Banner
-              src={
-                animeDetails[0].anilistResponse !== "NONE" &&
-                animeDetails[0].anilistResponse.anilistBannerImage !== null
-                  ? animeDetails[0].anilistResponse.anilistBannerImage
-                  : "https://wallpapercave.com/wp/wp8048984.jpg"
-              }
-              alt=""
-            />
-            <ContentWrapper>
-              <Poster>
-                <img src={animeDetails[0].gogoResponse.image} alt="" />
-                <Button
-                  to={"/watch" + animeDetails[0].gogoResponse.episodes[0]}
-                >
-                  Watch Now
-                </Button>
-              </Poster>
-              <div>
-                <h1>{animeDetails[0].gogoResponse.title}</h1>
-                <p>
-                  <span>Type: </span>
-                  {animeDetails[0].gogoResponse.type.replace("Type:", "")}
-                </p>
-                <p>
-                  <span>Plot Summery: </span>
-                  {animeDetails[0].gogoResponse.description.replace(
-                    "Plot Summary:",
-                    ""
-                  )}
-                </p>
-                <p>
-                  <span>Genre: </span>
-                  {animeDetails[0].gogoResponse.genre.replace("Genre:", "")}
-                </p>
-                <p>
-                  <span>Released: </span>
-                  {animeDetails[0].gogoResponse.released.replace(
-                    "Released:",
-                    ""
-                  )}
-                </p>
-                <p>
-                  <span>Status: </span>
-                  {animeDetails[0].gogoResponse.status.replace("Status:", "")}
-                </p>
-                <p>
-                  <span>Number of Episodes: </span>
-                  {animeDetails[0].gogoResponse.numOfEpisodes}
-                </p>
-              </div>
-            </ContentWrapper>
-            <Episode>
-              <h2>Episodes</h2>
-              <Episodes>
-                {animeDetails[0].gogoResponse.episodes.map((item, i) => (
-                  <EpisodeLink to={"/watch" + item}>
-                    Episode {i + 1}
-                  </EpisodeLink>
-                ))}
-              </Episodes>
-            </Episode>
-          </div>
-        )}
-      </Content>
+      {loading && <AnimeDetailsSkeleton />}
+      {!loading && (
+        <Content>
+          {animeDetails.length > 0 && (
+            <div>
+              <Banner
+                src={
+                  animeDetails[0].anilistResponse !== "NONE" &&
+                  animeDetails[0].anilistResponse.anilistBannerImage !== null
+                    ? animeDetails[0].anilistResponse.anilistBannerImage
+                    : "https://wallpapercave.com/wp/wp8048984.jpg"
+                }
+                alt=""
+              />
+              <ContentWrapper>
+                <Poster>
+                  <img src={animeDetails[0].gogoResponse.image} alt="" />
+                  <Button
+                    to={"/watch" + animeDetails[0].gogoResponse.episodes[0]}
+                  >
+                    Watch Now
+                  </Button>
+                </Poster>
+                <div>
+                  <h1>{animeDetails[0].gogoResponse.title}</h1>
+                  <p>
+                    <span>Type: </span>
+                    {animeDetails[0].gogoResponse.type.replace("Type:", "")}
+                  </p>
+                  <p>
+                    <span>Plot Summery: </span>
+                    {animeDetails[0].gogoResponse.description.replace(
+                      "Plot Summary:",
+                      ""
+                    )}
+                  </p>
+                  <p>
+                    <span>Genre: </span>
+                    {animeDetails[0].gogoResponse.genre.replace("Genre:", "")}
+                  </p>
+                  <p>
+                    <span>Released: </span>
+                    {animeDetails[0].gogoResponse.released.replace(
+                      "Released:",
+                      ""
+                    )}
+                  </p>
+                  <p>
+                    <span>Status: </span>
+                    {animeDetails[0].gogoResponse.status.replace("Status:", "")}
+                  </p>
+                  <p>
+                    <span>Number of Episodes: </span>
+                    {animeDetails[0].gogoResponse.numOfEpisodes}
+                  </p>
+                </div>
+              </ContentWrapper>
+              <Episode>
+                <h2>Episodes</h2>
+                <Episodes>
+                  {animeDetails[0].gogoResponse.episodes.map((item, i) => (
+                    <EpisodeLink to={"/watch" + item}>
+                      Episode {i + 1}
+                    </EpisodeLink>
+                  ))}
+                </Episodes>
+              </Episode>
+            </div>
+          )}
+        </Content>
+      )}
     </div>
   );
 }

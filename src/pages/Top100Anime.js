@@ -2,9 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
 
 function Top100Anime() {
   const [animeDetails, setAnimeDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAnime();
@@ -14,33 +16,39 @@ function Top100Anime() {
     let res = await axios.get(
       "https://miyou-api.herokuapp.com/api/top100?page=1&count=50"
     );
+    setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
   }
   return (
-    <Parent>
-      <Heading>
-        <span>Top 100 Anime</span> Results
-      </Heading>
-      <CardWrapper>
-        {animeDetails.map((item, i) => (
-          <Links
-            to={
-              "/search/" +
-              (item.title.userPreferred !== null
-                ? item.title.userPreferred
-                : item.title.romaji)
-            }
-          >
-            <img src={item.coverImage.large} alt="" />
-            <p>
-              {item.title.english !== null
-                ? item.title.english
-                : item.title.userPreferred}
-            </p>
-          </Links>
-        ))}
-      </CardWrapper>
-    </Parent>
+    <div>
+      {loading && <SearchResultsSkeleton name="Top 100 Anime" />}
+      {!loading && (
+        <Parent>
+          <Heading>
+            <span>Top 100 Anime</span> Results
+          </Heading>
+          <CardWrapper>
+            {animeDetails.map((item, i) => (
+              <Links
+                to={
+                  "/search/" +
+                  (item.title.userPreferred !== null
+                    ? item.title.userPreferred
+                    : item.title.romaji)
+                }
+              >
+                <img src={item.coverImage.large} alt="" />
+                <p>
+                  {item.title.english !== null
+                    ? item.title.english
+                    : item.title.userPreferred}
+                </p>
+              </Links>
+            ))}
+          </CardWrapper>
+        </Parent>
+      )}
+    </div>
   );
 }
 

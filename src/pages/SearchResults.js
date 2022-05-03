@@ -2,37 +2,46 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
+import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
 
 function SearchResults() {
   let urlParams = useParams().name;
   urlParams = urlParams.replace(":", "").replace("(", "").replace(")", "");
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getResults();
   }, [urlParams]);
 
   async function getResults() {
+    setLoading(true);
     let res = await axios.get(
       `https://miyou-api.herokuapp.com/api/search?name=${urlParams}`
     );
+    setLoading(false);
     setResults(res.data);
   }
   return (
-    <Parent>
-      <Heading>
-        <span>Search</span> Results
-      </Heading>
-      <CardWrapper>
-        {results.map((item, i) => (
-          <Wrapper to={item.link}>
-            <img src={item.image} alt="" />
-            <p>{item.title}</p>
-          </Wrapper>
-        ))}
-      </CardWrapper>
-      {results.length === 0 && <h2>No Search Results Found</h2>}
-    </Parent>
+    <div>
+      {loading && <SearchResultsSkeleton />}
+      {!loading && (
+        <Parent>
+          <Heading>
+            <span>Search</span> Results
+          </Heading>
+          <CardWrapper>
+            {results.map((item, i) => (
+              <Wrapper to={item.link}>
+                <img src={item.image} alt="" />
+                <p>{item.title}</p>
+              </Wrapper>
+            ))}
+          </CardWrapper>
+          {results.length === 0 && <h2>No Search Results Found</h2>}
+        </Parent>
+      )}
+    </div>
   );
 }
 

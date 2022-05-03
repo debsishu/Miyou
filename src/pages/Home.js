@@ -4,9 +4,11 @@ import styled from "styled-components";
 import Carousel from "../components/Home/Carousel";
 import axios from "axios";
 import AnimeCards from "../components/Home/AnimeCards";
+import HomeSkeleton from "../components/skeletons/CarouselSkeleton";
 
 function Home() {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getImages();
   }, []);
@@ -16,86 +18,90 @@ function Home() {
       "https://miyou-api.herokuapp.com/api/trending?page=1&count=10"
     );
     setImages(result.data.data.Page.media);
+    setLoading(false);
   }
   return (
-    <HomeDiv>
-      <HomeHeading>
-        <span>Recommended</span> to you
-      </HomeHeading>
-      <Carousel images={images} />
-      <div>
-        <HeadingWrapper>
-          <Heading>
-            <span>All Time</span> Popular
-          </Heading>
-          <Link
-            style={{
-              color: "white",
-              fontSize: "1.1rem",
-              fontFamily: "'Gilroy-Medium', sans-serif",
-            }}
-            to="/popular"
-          >
-            View All
-          </Link>
-        </HeadingWrapper>
-        <AnimeCards count="15" criteria="popular" />
-      </div>
-      <div>
-        <HeadingWrapper>
-          <Heading>
-            <span>Trending</span> Now
-          </Heading>
-          <Link
-            style={{
-              color: "white",
-              fontSize: "1.1rem",
-              fontFamily: "'Gilroy-Medium', sans-serif",
-            }}
-            to="/trending"
-          >
-            View All
-          </Link>
-        </HeadingWrapper>
-        <AnimeCards count="15" criteria="trending" />
-      </div>
-      <div>
-        <HeadingWrapper>
-          <Heading>
-            <span>Top 100</span> Anime
-          </Heading>
-          <Link
-            style={{
-              color: "white",
-              fontSize: "1.1rem",
-              fontFamily: "'Gilroy-Medium', sans-serif",
-            }}
-            to="/top100"
-          >
-            View All
-          </Link>
-        </HeadingWrapper>
-        <AnimeCards count="15" criteria="top100" />
-      </div>
-      <div>
-        <HeadingWrapper>
-          <Heading>
-            <span>All Time</span> Favourite
-          </Heading>
-          <Link
-            style={{
-              color: "white",
-              fontSize: "1.1rem",
-              fontFamily: "'Gilroy-Medium', sans-serif",
-            }}
-            to="/top100"
-          >
-            View All
-          </Link>
-        </HeadingWrapper>
-        <AnimeCards count="15" criteria="favourite" />
-      </div>
-    </HomeDiv>
+    <div>
+      <HomeDiv>
+        <HomeHeading>
+          <span>Recommended</span> to you
+        </HomeHeading>
+        {loading && <HomeSkeleton />}
+        {!loading && <Carousel images={images} />}
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>All Time</span> Popular
+            </Heading>
+            <Link
+              style={{
+                color: "white",
+                fontSize: "1.1rem",
+                fontFamily: "'Gilroy-Medium', sans-serif",
+              }}
+              to="/popular"
+            >
+              View All
+            </Link>
+          </HeadingWrapper>
+          <AnimeCards count="15" criteria="popular" />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>Trending</span> Now
+            </Heading>
+            <Link
+              style={{
+                color: "white",
+                fontSize: "1.1rem",
+                fontFamily: "'Gilroy-Medium', sans-serif",
+              }}
+              to="/trending"
+            >
+              View All
+            </Link>
+          </HeadingWrapper>
+          <AnimeCards count="15" criteria="trending" />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>Top 100</span> Anime
+            </Heading>
+            <Link
+              style={{
+                color: "white",
+                fontSize: "1.1rem",
+                fontFamily: "'Gilroy-Medium', sans-serif",
+              }}
+              to="/top100"
+            >
+              View All
+            </Link>
+          </HeadingWrapper>
+          <AnimeCards count="15" criteria="top100" />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>All Time</span> Favourite
+            </Heading>
+            <Link
+              style={{
+                color: "white",
+                fontSize: "1.1rem",
+                fontFamily: "'Gilroy-Medium', sans-serif",
+              }}
+              to="/top100"
+            >
+              View All
+            </Link>
+          </HeadingWrapper>
+          <AnimeCards count="15" criteria="favourite" />
+        </div>
+      </HomeDiv>
+    </div>
   );
 }
 

@@ -5,277 +5,294 @@ import styled from "styled-components";
 import { BiArrowToBottom } from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { IconContext } from "react-icons";
+import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
 
 function WatchAnime() {
   let episodeSlug = useParams().episode;
 
   const [episodeLinks, setEpisodeLinks] = useState([]);
   const [currentServer, setCurrentServer] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getEpisodeLinks();
   }, [episodeSlug]);
 
   async function getEpisodeLinks() {
+    setLoading(true);
     let res = await axios.get(
       `https://miyou-api.herokuapp.com/api/getlinks?link=/${episodeSlug}`
     );
+    setLoading(false);
     setEpisodeLinks(res.data);
     setCurrentServer(res.data[0].vidstreaming);
   }
 
   return (
-    <Wrapper>
-      {episodeLinks.length > 0 && currentServer !== "" && (
-        <div>
-          <Titles>
-            <p>
-              <span>
-                {episodeLinks[0].titleName.substring(
-                  0,
-                  episodeLinks[0].titleName.indexOf("Episode")
-                )}
-              </span>{" "}
-              -
-              {" " +
-                episodeLinks[0].titleName.substring(
-                  episodeLinks[0].titleName.indexOf("Episode")
-                )}
-            </p>
-            <IconContext.Provider
-              value={{
-                size: "1.2rem",
-                style: {
-                  verticalAlign: "middle",
-                  marginBottom: "0.2rem",
-                  marginLeft: "0.3rem",
-                },
-              }}
-            >
-              <a
-                href={episodeLinks[0].downloadLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download
-                <BiArrowToBottom />
-              </a>
-            </IconContext.Provider>
-          </Titles>
-          <div>
-            <IframeWrapper>
-              <iframe
-                title={episodeLinks[0].title}
-                src={currentServer}
-                allowfullscreen="true"
-                frameborder="0"
-                marginwidth="0"
-                marginheight="0"
-                scrolling="no"
-              ></iframe>
-            </IframeWrapper>
-            <EpisodeButtons>
-              <IconContext.Provider
-                value={{
-                  size: "1.3rem",
-                  style: {
-                    verticalAlign: "middle",
-                    marginBottom: "0.2rem",
-                    marginRight: "0.3rem",
-                  },
-                }}
-              >
-                <EpisodeLinks
-                  to={
-                    "/watch" +
-                    episodeLinks[0].baseEpisodeLink +
-                    (parseInt(episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")) - 1)
-                  }
-                  style={
-                    episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
-                      ? {
-                          pointerEvents: "none",
-                          color: "rgba(255,255,255, 0.2)",
-                        }
-                      : {}
-                  }
+    <div>
+      {loading && <WatchAnimeSkeleton />}
+      {!loading && (
+        <Wrapper>
+          {episodeLinks.length > 0 && currentServer !== "" && (
+            <div>
+              <Titles>
+                <p>
+                  <span>
+                    {episodeLinks[0].titleName.substring(
+                      0,
+                      episodeLinks[0].titleName.indexOf("Episode")
+                    )}
+                  </span>{" "}
+                  -
+                  {" " +
+                    episodeLinks[0].titleName.substring(
+                      episodeLinks[0].titleName.indexOf("Episode")
+                    )}
+                </p>
+                <IconContext.Provider
+                  value={{
+                    size: "1.2rem",
+                    style: {
+                      verticalAlign: "middle",
+                      marginBottom: "0.2rem",
+                      marginLeft: "0.3rem",
+                    },
+                  }}
                 >
-                  <HiArrowSmLeft />
-                  Previous
-                </EpisodeLinks>
-              </IconContext.Provider>
-              <IconContext.Provider
-                value={{
-                  size: "1.3rem",
-                  style: {
-                    verticalAlign: "middle",
-                    marginBottom: "0.2rem",
-                    marginLeft: "0.3rem",
-                  },
-                }}
-              >
-                <EpisodeLinks
-                  to={
-                    "/watch" +
-                    episodeLinks[0].baseEpisodeLink +
-                    (parseInt(episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")) + 1)
-                  }
-                  style={
-                    episodeLinks[0].numOfEpisodes ===
-                    episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                      ? {
-                          pointerEvents: "none",
-                          color: "rgba(255,255,255, 0.2)",
-                        }
-                      : {}
-                  }
-                >
-                  Next
-                  <HiArrowSmRight />
-                </EpisodeLinks>
-              </IconContext.Provider>
-            </EpisodeButtons>
-            <ServerWrapper>
-              <div className="server-wrapper">
-                <p>Servers List</p>
-                <div className="serverlinks">
-                  {episodeLinks[0].vidstreaming !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].vidstreaming);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].vidstreaming
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      VIDSTREAMING
-                    </button>
-                  )}
-                  {episodeLinks[0].streamsb !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].streamsb);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].streamsb
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      STREAMSB
-                    </button>
-                  )}
-                  {episodeLinks[0].gogoserver !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].gogoserver);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].gogoserver
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      GOGOSERVER
-                    </button>
-                  )}
-                  {episodeLinks[0].xstreamcdn !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].xstreamcdn);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].xstreamcdn
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      XSTREAMCDN
-                    </button>
-                  )}
-                  {episodeLinks[0].mixdrop !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].mixdrop);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].mixdrop
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      MIXDROP
-                    </button>
-                  )}
-                  {episodeLinks[0].mp4upload !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].mp4upload);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].mp4upload
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      MP4UPLOAD
-                    </button>
-                  )}
-                  {episodeLinks[0].doodstream !== null && (
-                    <button
-                      onClick={() => {
-                        setCurrentServer(episodeLinks[0].doodstream);
-                      }}
-                      style={
-                        currentServer === episodeLinks[0].doodstream
-                          ? {
-                              backgroundColor: "#7676ff",
-                            }
-                          : {}
-                      }
-                    >
-                      DOODSTREAM
-                    </button>
-                  )}
-                </div>
-              </div>
-            </ServerWrapper>
-            <EpisodesWrapper>
-              <p>Episodes</p>
-              <Episodes>
-                {episodeLinks[0].episodes.map((item, i) => (
-                  <EpisodeLink
-                    to={"/watch" + item}
-                    style={
-                      parseInt(episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")) ===
-                      i + 1
-                        ? { backgroundColor: "#7676ff" }
-                        : {}
-                    }
+                  <a
+                    href={episodeLinks[0].downloadLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Episode {i + 1}
-                  </EpisodeLink>
-                ))}
-              </Episodes>
-            </EpisodesWrapper>
-          </div>
-        </div>
+                    Download
+                    <BiArrowToBottom />
+                  </a>
+                </IconContext.Provider>
+              </Titles>
+              <div>
+                <IframeWrapper>
+                  <iframe
+                    title={episodeLinks[0].title}
+                    src={currentServer}
+                    allowfullscreen="true"
+                    frameborder="0"
+                    marginwidth="0"
+                    marginheight="0"
+                    scrolling="no"
+                  ></iframe>
+                </IframeWrapper>
+                <EpisodeButtons>
+                  <IconContext.Provider
+                    value={{
+                      size: "1.3rem",
+                      style: {
+                        verticalAlign: "middle",
+                        marginBottom: "0.2rem",
+                        marginRight: "0.3rem",
+                      },
+                    }}
+                  >
+                    <EpisodeLinks
+                      to={
+                        "/watch" +
+                        episodeLinks[0].baseEpisodeLink +
+                        (parseInt(
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                        ) -
+                          1)
+                      }
+                      style={
+                        episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
+                          ? {
+                              pointerEvents: "none",
+                              color: "rgba(255,255,255, 0.2)",
+                            }
+                          : {}
+                      }
+                    >
+                      <HiArrowSmLeft />
+                      Previous
+                    </EpisodeLinks>
+                  </IconContext.Provider>
+                  <IconContext.Provider
+                    value={{
+                      size: "1.3rem",
+                      style: {
+                        verticalAlign: "middle",
+                        marginBottom: "0.2rem",
+                        marginLeft: "0.3rem",
+                      },
+                    }}
+                  >
+                    <EpisodeLinks
+                      to={
+                        "/watch" +
+                        episodeLinks[0].baseEpisodeLink +
+                        (parseInt(
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                        ) +
+                          1)
+                      }
+                      style={
+                        episodeLinks[0].numOfEpisodes ===
+                        episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ? {
+                              pointerEvents: "none",
+                              color: "rgba(255,255,255, 0.2)",
+                            }
+                          : {}
+                      }
+                    >
+                      Next
+                      <HiArrowSmRight />
+                    </EpisodeLinks>
+                  </IconContext.Provider>
+                </EpisodeButtons>
+                <ServerWrapper>
+                  <div className="server-wrapper">
+                    <p>Servers List</p>
+                    <div className="serverlinks">
+                      {episodeLinks[0].vidstreaming !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].vidstreaming);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].vidstreaming
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          VIDSTREAMING
+                        </button>
+                      )}
+                      {episodeLinks[0].streamsb !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].streamsb);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].streamsb
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          STREAMSB
+                        </button>
+                      )}
+                      {episodeLinks[0].gogoserver !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].gogoserver);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].gogoserver
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          GOGOSERVER
+                        </button>
+                      )}
+                      {episodeLinks[0].xstreamcdn !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].xstreamcdn);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].xstreamcdn
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          XSTREAMCDN
+                        </button>
+                      )}
+                      {episodeLinks[0].mixdrop !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].mixdrop);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].mixdrop
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          MIXDROP
+                        </button>
+                      )}
+                      {episodeLinks[0].mp4upload !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].mp4upload);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].mp4upload
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          MP4UPLOAD
+                        </button>
+                      )}
+                      {episodeLinks[0].doodstream !== null && (
+                        <button
+                          onClick={() => {
+                            setCurrentServer(episodeLinks[0].doodstream);
+                          }}
+                          style={
+                            currentServer === episodeLinks[0].doodstream
+                              ? {
+                                  backgroundColor: "#7676ff",
+                                }
+                              : {}
+                          }
+                        >
+                          DOODSTREAM
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </ServerWrapper>
+                <EpisodesWrapper>
+                  <p>Episodes</p>
+                  <Episodes>
+                    {episodeLinks[0].episodes.map((item, i) => (
+                      <EpisodeLink
+                        to={"/watch" + item}
+                        style={
+                          parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) ===
+                          i + 1
+                            ? { backgroundColor: "#7676ff" }
+                            : {}
+                        }
+                      >
+                        Episode {i + 1}
+                      </EpisodeLink>
+                    ))}
+                  </Episodes>
+                </EpisodesWrapper>
+              </div>
+            </div>
+          )}
+        </Wrapper>
       )}
-    </Wrapper>
+    </div>
   );
 }
 
