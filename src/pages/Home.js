@@ -5,15 +5,19 @@ import Carousel from "../components/Home/Carousel";
 import axios from "axios";
 import AnimeCards from "../components/Home/AnimeCards";
 import HomeSkeleton from "../components/skeletons/CarouselSkeleton";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 function Home() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { height, width } = useWindowDimensions();
+
   useEffect(() => {
     getImages();
   }, []);
 
   async function getImages() {
+    window.scrollTo(0, 0);
     let result = await axios.get(
       "https://miyou-api.herokuapp.com/api/trending?page=1&count=10"
     );
@@ -33,80 +37,58 @@ function Home() {
             <Heading>
               <span>All Time</span> Popular
             </Heading>
-            <Link
-              style={{
-                color: "white",
-                fontSize: "1.1rem",
-                fontFamily: "'Gilroy-Medium', sans-serif",
-              }}
-              to="/popular"
-            >
-              View All
-            </Link>
+            <Links to="/popular">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count="15" criteria="popular" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="popular" />
         </div>
         <div>
           <HeadingWrapper>
             <Heading>
               <span>Trending</span> Now
             </Heading>
-            <Link
-              style={{
-                color: "white",
-                fontSize: "1.1rem",
-                fontFamily: "'Gilroy-Medium', sans-serif",
-              }}
-              to="/trending"
-            >
-              View All
-            </Link>
+            <Links to="/trending">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count="15" criteria="trending" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="trending" />
         </div>
         <div>
           <HeadingWrapper>
             <Heading>
               <span>Top 100</span> Anime
             </Heading>
-            <Link
-              style={{
-                color: "white",
-                fontSize: "1.1rem",
-                fontFamily: "'Gilroy-Medium', sans-serif",
-              }}
-              to="/top100"
-            >
-              View All
-            </Link>
+            <Links to="/top100">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count="15" criteria="top100" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="top100" />
         </div>
         <div>
           <HeadingWrapper>
             <Heading>
               <span>All Time</span> Favourite
             </Heading>
-            <Link
-              style={{
-                color: "white",
-                fontSize: "1.1rem",
-                fontFamily: "'Gilroy-Medium', sans-serif",
-              }}
-              to="/top100"
-            >
-              View All
-            </Link>
+            <Links to="/favourites">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count="15" criteria="favourite" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="favourite" />
         </div>
       </HomeDiv>
     </div>
   );
 }
 
+const Links = styled(Link)`
+  color: white;
+  font-size: 1.1rem;
+  font-family: "Gilroy-Medium", sans-serif;
+  @media screen and (max-width: 600px) {
+    color: white;
+    font-size: 1rem;
+    font-family: "Gilroy-Medium", sans-serif;
+  }
+`;
+
 const HomeDiv = styled.div`
   margin: 1.5rem 5rem 1rem 5rem;
+  @media screen and (max-width: 600px) {
+    margin: 1rem 1rem 0rem 1rem;
+  }
 `;
 
 const HomeHeading = styled.p`
@@ -118,6 +100,10 @@ const HomeHeading = styled.p`
     font-family: "Gilroy-Bold", sans-serif;
   }
   margin-bottom: 1rem;
+
+  @media screen and (max-width: 600px) {
+    font-size: 1.7rem;
+  }
 `;
 
 const Heading = styled.p`
@@ -128,6 +114,10 @@ const Heading = styled.p`
   span {
     font-family: "Gilroy-Bold", sans-serif;
   }
+
+  @media screen and (max-width: 600px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const HeadingWrapper = styled.div`
@@ -135,6 +125,9 @@ const HeadingWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  @media screen and (max-width: 600px) {
+    margin-top: 1rem;
+  }
 `;
 
 export default Home;

@@ -3,23 +3,34 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import AnimeDetailsSkeleton from "../components/skeletons/AnimeDetailsSkeleton";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 function AnimeDetails() {
   let slug = useParams().slug;
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const { height, width } = useWindowDimensions();
+
   useEffect(() => {
     getAnimeDetails();
   }, []);
 
   async function getAnimeDetails() {
     setLoading(true);
+    setExpanded(false);
+    window.scrollTo(0, 0);
     let res = await axios.get(
       `https://miyou-api.herokuapp.com/api/getanime?link=/category/${slug}`
     );
     setLoading(false);
     setAnimeDetails(res.data);
   }
+
+  function readMoreHandler() {
+    setExpanded(!expanded);
+  }
+
   return (
     <div>
       {loading && <AnimeDetailsSkeleton />}
@@ -51,13 +62,39 @@ function AnimeDetails() {
                     <span>Type: </span>
                     {animeDetails[0].gogoResponse.type.replace("Type:", "")}
                   </p>
-                  <p>
-                    <span>Plot Summery: </span>
-                    {animeDetails[0].gogoResponse.description.replace(
-                      "Plot Summary:",
-                      ""
-                    )}
-                  </p>
+                  {width <= 600 && expanded && (
+                    <p>
+                      <span>Plot Summery: </span>
+                      {animeDetails[0].gogoResponse.description.replace(
+                        "Plot Summary:",
+                        ""
+                      )}
+                      <button onClick={() => readMoreHandler()}>
+                        read less
+                      </button>
+                    </p>
+                  )}
+                  {width <= 600 && !expanded && (
+                    <p>
+                      <span>Plot Summery: </span>
+                      {animeDetails[0].gogoResponse.description
+                        .replace("Plot Summary:", "")
+                        .substring(0, 200) + "... "}
+                      <button onClick={() => readMoreHandler()}>
+                        read more
+                      </button>
+                    </p>
+                  )}
+                  {width > 600 && (
+                    <p>
+                      <span>Plot Summery: </span>
+                      {animeDetails[0].gogoResponse.description.replace(
+                        "Plot Summary:",
+                        ""
+                      )}
+                    </p>
+                  )}
+
                   <p>
                     <span>Genre: </span>
                     {animeDetails[0].gogoResponse.genre.replace("Genre:", "")}
@@ -81,13 +118,22 @@ function AnimeDetails() {
               </ContentWrapper>
               <Episode>
                 <h2>Episodes</h2>
-                <Episodes>
-                  {animeDetails[0].gogoResponse.episodes.map((item, i) => (
-                    <EpisodeLink to={"/watch" + item}>
-                      Episode {i + 1}
-                    </EpisodeLink>
-                  ))}
-                </Episodes>
+                {width <= 600 && (
+                  <Episodes>
+                    {animeDetails[0].gogoResponse.episodes.map((item, i) => (
+                      <EpisodeLink to={"/watch" + item}>{i + 1}</EpisodeLink>
+                    ))}
+                  </Episodes>
+                )}
+                {width > 600 && (
+                  <Episodes>
+                    {animeDetails[0].gogoResponse.episodes.map((item, i) => (
+                      <EpisodeLink to={"/watch" + item}>
+                        Episode {i + 1}
+                      </EpisodeLink>
+                    ))}
+                  </Episodes>
+                )}
               </Episode>
             </div>
           )}
@@ -110,6 +156,11 @@ const Episode = styled.div`
     margin-bottom: 1rem;
   }
   box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81);
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+    margin: 1rem;
+  }
 `;
 
 const Episodes = styled.div`
@@ -118,6 +169,10 @@ const Episodes = styled.div`
   grid-gap: 1rem;
   grid-row-gap: 1rem;
   justify-content: space-between;
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+  }
 `;
 
 const EpisodeLink = styled(Link)`
@@ -134,11 +189,21 @@ const EpisodeLink = styled(Link)`
   :hover {
     background-color: #7676ff;
   }
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+    border-radius: 0.3rem;
+    font-family: "Gilroy-Bold", sans-serif;
+  }
 `;
 
 const Content = styled.div`
   margin: 2rem 5rem 2rem 5rem;
   position: relative;
+
+  @media screen and (max-width: 600px) {
+    margin: 1rem;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -165,6 +230,35 @@ const ContentWrapper = styled.div`
       font-family: "Gilroy-Bold", sans-serif;
       color: white;
     }
+    button {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0;
+    div {
+      margin: 1rem;
+      margin-bottom: 0.2rem;
+      h1 {
+        font-size: 1.6rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      button {
+        display: inline;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        text-decoration: underline;
+        font-family: "Gilroy-Bold", sans-serif;
+        font-size: 1rem;
+        color: white;
+      }
+    }
   }
 `;
 
@@ -177,6 +271,11 @@ const Poster = styled.div`
     position: relative;
     top: -20%;
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+  }
+  @media screen and (max-width: 600px) {
+    img {
+      display: none;
+    }
   }
 `;
 
@@ -192,6 +291,11 @@ const Button = styled(Link)`
   position: relative;
   top: -20%;
   white-space: nowrap;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    width: 100%;
+  }
 `;
 
 const Banner = styled.img`
@@ -199,6 +303,11 @@ const Banner = styled.img`
   height: 20rem;
   object-fit: cover;
   border-radius: 0.7rem;
+
+  @media screen and (max-width: 600px) {
+    height: 13rem;
+    border-radius: 0.5rem;
+  }
 `;
 
 export default AnimeDetails;

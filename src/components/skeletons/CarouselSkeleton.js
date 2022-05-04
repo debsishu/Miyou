@@ -1,8 +1,11 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function CarouselSkeleton() {
+  const { height, width } = useWindowDimensions();
+
   return (
     <div
       style={{
@@ -10,10 +13,10 @@ function CarouselSkeleton() {
       }}
     >
       <Skeleton
-        height={"330px"}
+        height={width <= 600 ? "270px" : "330px"}
         baseColor={"#262539"}
         highlightColor={"#34324D"}
-        borderRadius={"0.7rem"}
+        borderRadius={width <= 600 ? "0.5rem" : "0.7rem"}
       />
     </div>
   );

@@ -27,6 +27,10 @@ const GlobalStyle = createGlobalStyle`
 	}
 	.swiper-pagination-bullet {
 		background-color: #C8C8FF;
+		@media screen and (max-width: 600px) {
+			width: 0.4rem;
+			height: 0.4rem;
+		}
 	}
 
 	.swiper-button-next,
@@ -36,7 +40,10 @@ const GlobalStyle = createGlobalStyle`
 	}
 
 	.swiper-wrapper{
-    padding-bottom: 30px;
+		padding-bottom: 30px;
+		@media screen and (max-width: 600px) {
+			padding-bottom: 40px;
+		}
 	}
 
 	.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{

@@ -4,9 +4,11 @@ import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { IconContext } from "react-icons";
 import Search from "./Search";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function Nav() {
   const [isActive, setIsActive] = useState(false);
+  const { height, width } = useWindowDimensions();
 
   return (
     <div>
@@ -14,27 +16,46 @@ function Nav() {
         <Link to="/">
           <img src="./assets/logo.svg" alt="Logo Here" />
         </Link>
-        <div>
+        <div className="nav-links">
           <Links to="/trending">Trending</Links>
           <Links to="/popular">Popular</Links>
           <Links to="/favourites">Favourites</Links>
           <Links to="/top100">Top 100 Anime</Links>
         </div>
-        <IconContext.Provider
-          value={{
-            size: "1rem",
-            style: {
-              verticalAlign: "middle",
-              marginBottom: "0.2rem",
-              marginRight: "0.3rem",
-            },
-          }}
-        >
-          <Button onClick={(e) => setIsActive(!isActive)}>
-            <FiSearch />
-            Search
-          </Button>
-        </IconContext.Provider>
+
+        {width <= 600 && (
+          <IconContext.Provider
+            value={{
+              size: "1.5rem",
+              style: {
+                verticalAlign: "middle",
+                marginBottom: "0.2rem",
+                marginRight: "0.3rem",
+              },
+            }}
+          >
+            <Button onClick={(e) => setIsActive(!isActive)}>
+              <FiSearch />
+            </Button>
+          </IconContext.Provider>
+        )}
+        {width > 600 && (
+          <IconContext.Provider
+            value={{
+              size: "1rem",
+              style: {
+                verticalAlign: "middle",
+                marginBottom: "0.2rem",
+                marginRight: "0.3rem",
+              },
+            }}
+          >
+            <Button onClick={(e) => setIsActive(!isActive)}>
+              <FiSearch />
+              Search
+            </Button>
+          </IconContext.Provider>
+        )}
       </NavBar>
       {isActive && <Search isActive={isActive} setIsActive={setIsActive} />}
       {isActive && <Shadow></Shadow>}
@@ -66,6 +87,11 @@ const Button = styled.button`
     font-size: 1rem;
   }
   white-space: nowrap;
+  @media screen and (max-width: 600px) {
+    padding: 0.5rem;
+    padding-right: 0;
+    background-color: transparent;
+  }
 `;
 
 const Links = styled(Link)`
@@ -80,6 +106,16 @@ const NavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
   margin: 1.8rem 5rem 0 5rem;
+  @media screen and (max-width: 600px) {
+    margin: 1rem 2rem;
+    margin-top: 1rem;
+    img {
+      height: 1.7rem;
+    }
+    .nav-links {
+      display: none;
+    }
+  }
 `;
 
 export default Nav;

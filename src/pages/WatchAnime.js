@@ -20,13 +20,13 @@ function WatchAnime() {
 
   async function getEpisodeLinks() {
     setLoading(true);
+    window.scrollTo(0, 0);
     let res = await axios.get(
       `https://miyou-api.herokuapp.com/api/getlinks?link=/${episodeSlug}`
     );
     setLoading(false);
     setEpisodeLinks(res.data);
     setCurrentServer(res.data[0].vidstreaming);
-    window.scrollTo(0, 0);
   }
 
   return (

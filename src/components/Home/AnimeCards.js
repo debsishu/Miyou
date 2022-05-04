@@ -35,8 +35,8 @@ function AnimeCards(props) {
           }}
           breakpoints={{
             "@0.00": {
-              slidesPerView: 2,
-              spaceBetween: 10,
+              slidesPerView: 3,
+              spaceBetween: 15,
             },
             "@0.75": {
               slidesPerView: 3,
@@ -92,6 +92,10 @@ const Wrapper = styled.div`
     border-radius: 0.5rem;
     margin-bottom: 0.3rem;
     object-fit: cover;
+    @media screen and (max-width: 600px) {
+      width: 120px;
+      height: 180px;
+    }
   }
 
   p {
