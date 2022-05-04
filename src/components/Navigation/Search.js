@@ -4,9 +4,11 @@ import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { CgClose } from "react-icons/cg";
 import { IconContext } from "react-icons";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function Search({ isActive, setIsActive }) {
   const [title, setTitle] = useState("");
+  const { width, height } = useWindowDimensions();
   return (
     <Wrapper>
       <CloseButton>
@@ -28,30 +30,49 @@ function Search({ isActive, setIsActive }) {
       </CloseButton>
       <Content>
         <div className="main">
-          <IconContext.Provider
-            value={{
-              size: "1.5rem",
-              color: "#C5C5C5",
-              style: {
-                verticalAlign: "middle",
-                marginBottom: "0.1rem",
-                marginRight: "0.3rem",
-              },
-            }}
-          >
-            <FiSearch />
-          </IconContext.Provider>
+          <div>
+            {width <= 600 && (
+              <IconContext.Provider
+                value={{
+                  size: "1.5rem",
+                  color: "#C5C5C5",
+                  style: {
+                    verticalAlign: "middle",
+                    marginBottom: "0.1rem",
+                    marginRight: "0.3rem",
+                  },
+                }}
+              >
+                <FiSearch />
+              </IconContext.Provider>
+            )}
+            {width > 600 && (
+              <IconContext.Provider
+                value={{
+                  size: "1.5rem",
+                  color: "#C5C5C5",
+                  style: {
+                    verticalAlign: "middle",
+                    marginBottom: "0.1rem",
+                    marginRight: "0.3rem",
+                  },
+                }}
+              >
+                <FiSearch />
+              </IconContext.Provider>
+            )}
 
-          <input
-            type="text"
-            required
-            placeholder={"Enter the name of the anime"}
-            value={title}
-            autoFocus
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
+            <input
+              type="text"
+              required
+              placeholder={"Enter the name of the anime"}
+              value={title}
+              autoFocus
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </div>
           <SearchButton
             to={"/search/" + title}
             onClick={(e) => {
@@ -81,6 +102,11 @@ const Content = styled.div`
     justify-content: space-between;
     align-items: center;
   }
+  div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
   input {
     outline: none;
     border: none;
@@ -91,6 +117,26 @@ const Content = styled.div`
   }
   ::placeholder {
     color: #c5c5c5;
+  }
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+
+    .main {
+      flex-direction: column;
+      background-color: transparent;
+      padding: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    div {
+      background-color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 0.3rem;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
   }
 `;
 
@@ -112,7 +158,14 @@ const SearchButton = styled(Link)`
   padding: 0.9rem 2rem;
   text-decoration: none;
   border-radius: 0.3rem;
+  text-align: center;
   font-family: "Gilroy-Bold", sans-serif;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    width: 100%;
+    font-size: 1.2rem;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -125,6 +178,10 @@ const Wrapper = styled.div`
   width: 80%;
   border: 1px solid #35334e;
   border-radius: 0.5rem;
+
+  @media screen and (max-width: 600px) {
+    width: 93%;
+  }
 `;
 
 export default Search;

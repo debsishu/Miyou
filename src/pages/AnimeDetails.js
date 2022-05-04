@@ -228,6 +228,7 @@ const ContentWrapper = styled.div`
     }
     h1 {
       font-family: "Gilroy-Bold", sans-serif;
+      font-weight: normal;
       color: white;
     }
     button {

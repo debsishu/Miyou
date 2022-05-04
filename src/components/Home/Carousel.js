@@ -50,10 +50,10 @@ function Carousel({ images }) {
                       {width <= 600 && (
                         <p>
                           {item.title.english !== null
-                            ? item.title.english.length > 20
+                            ? item.title.english.length > 40
                               ? item.title.english.substring(0, 40) + "..."
                               : item.title.english
-                            : item.title.romaji.length > 20
+                            : item.title.romaji.length > 40
                             ? item.title.romaji.substring(0, 40) + "..."
                             : item.title.romaji}
                         </p>

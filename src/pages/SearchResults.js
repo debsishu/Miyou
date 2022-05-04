@@ -48,6 +48,9 @@ function SearchResults() {
 
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
+  h2 {
+    color: white;
+  }
   @media screen and (max-width: 600px) {
     margin: 1rem;
   }

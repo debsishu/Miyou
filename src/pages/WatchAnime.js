@@ -6,6 +6,7 @@ import { BiArrowToBottom } from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 function WatchAnime() {
   let episodeSlug = useParams().episode;
@@ -13,6 +14,7 @@ function WatchAnime() {
   const [episodeLinks, setEpisodeLinks] = useState([]);
   const [currentServer, setCurrentServer] = useState("");
   const [loading, setLoading] = useState(true);
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     getEpisodeLinks();
@@ -50,25 +52,45 @@ function WatchAnime() {
                       episodeLinks[0].titleName.indexOf("Episode")
                     )}
                 </p>
-                <IconContext.Provider
-                  value={{
-                    size: "1.2rem",
-                    style: {
-                      verticalAlign: "middle",
-                      marginBottom: "0.2rem",
-                      marginLeft: "0.3rem",
-                    },
-                  }}
-                >
-                  <a
-                    href={episodeLinks[0].downloadLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {width <= 600 && (
+                  <IconContext.Provider
+                    value={{
+                      size: "1.8rem",
+                      style: {
+                        verticalAlign: "middle",
+                      },
+                    }}
                   >
-                    Download
-                    <BiArrowToBottom />
-                  </a>
-                </IconContext.Provider>
+                    <a
+                      href={episodeLinks[0].downloadLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <BiArrowToBottom />
+                    </a>
+                  </IconContext.Provider>
+                )}
+                {width > 600 && (
+                  <IconContext.Provider
+                    value={{
+                      size: "1.2rem",
+                      style: {
+                        verticalAlign: "middle",
+                        marginBottom: "0.2rem",
+                        marginLeft: "0.3rem",
+                      },
+                    }}
+                  >
+                    <a
+                      href={episodeLinks[0].downloadLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download
+                      <BiArrowToBottom />
+                    </a>
+                  </IconContext.Provider>
+                )}
               </Titles>
               <div>
                 <IframeWrapper>
@@ -83,71 +105,138 @@ function WatchAnime() {
                   ></iframe>
                 </IframeWrapper>
                 <EpisodeButtons>
-                  <IconContext.Provider
-                    value={{
-                      size: "1.3rem",
-                      style: {
-                        verticalAlign: "middle",
-                        marginBottom: "0.2rem",
-                        marginRight: "0.3rem",
-                      },
-                    }}
-                  >
-                    <EpisodeLinks
-                      to={
-                        "/watch" +
-                        episodeLinks[0].baseEpisodeLink +
-                        (parseInt(
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                        ) -
-                          1)
-                      }
-                      style={
-                        episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
-                          ? {
-                              pointerEvents: "none",
-                              color: "rgba(255,255,255, 0.2)",
-                            }
-                          : {}
-                      }
+                  {width <= 600 && (
+                    <IconContext.Provider
+                      value={{
+                        size: "1.8rem",
+                        style: {
+                          verticalAlign: "middle",
+                        },
+                      }}
                     >
-                      <HiArrowSmLeft />
-                      Previous
-                    </EpisodeLinks>
-                  </IconContext.Provider>
-                  <IconContext.Provider
-                    value={{
-                      size: "1.3rem",
-                      style: {
-                        verticalAlign: "middle",
-                        marginBottom: "0.2rem",
-                        marginLeft: "0.3rem",
-                      },
-                    }}
-                  >
-                    <EpisodeLinks
-                      to={
-                        "/watch" +
-                        episodeLinks[0].baseEpisodeLink +
-                        (parseInt(
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                        ) +
-                          1)
-                      }
-                      style={
-                        episodeLinks[0].numOfEpisodes ===
-                        episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ? {
-                              pointerEvents: "none",
-                              color: "rgba(255,255,255, 0.2)",
-                            }
-                          : {}
-                      }
+                      <EpisodeLinks
+                        to={
+                          "/watch" +
+                          episodeLinks[0].baseEpisodeLink +
+                          (parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) -
+                            1)
+                        }
+                        style={
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
+                            ? {
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
+                            : {}
+                        }
+                      >
+                        <HiArrowSmLeft />
+                      </EpisodeLinks>
+                    </IconContext.Provider>
+                  )}
+                  {width > 600 && (
+                    <IconContext.Provider
+                      value={{
+                        size: "1.3rem",
+                        style: {
+                          verticalAlign: "middle",
+                          marginBottom: "0.2rem",
+                          marginRight: "0.3rem",
+                        },
+                      }}
                     >
-                      Next
-                      <HiArrowSmRight />
-                    </EpisodeLinks>
-                  </IconContext.Provider>
+                      <EpisodeLinks
+                        to={
+                          "/watch" +
+                          episodeLinks[0].baseEpisodeLink +
+                          (parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) -
+                            1)
+                        }
+                        style={
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
+                            ? {
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
+                            : {}
+                        }
+                      >
+                        <HiArrowSmLeft />
+                        Previous
+                      </EpisodeLinks>
+                    </IconContext.Provider>
+                  )}
+                  {width <= 600 && (
+                    <IconContext.Provider
+                      value={{
+                        size: "1.8rem",
+                        style: {
+                          verticalAlign: "middle",
+                        },
+                      }}
+                    >
+                      <EpisodeLinks
+                        to={
+                          "/watch" +
+                          episodeLinks[0].baseEpisodeLink +
+                          (parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) +
+                            1)
+                        }
+                        style={
+                          episodeLinks[0].numOfEpisodes ===
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ? {
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
+                            : {}
+                        }
+                      >
+                        <HiArrowSmRight />
+                      </EpisodeLinks>
+                    </IconContext.Provider>
+                  )}
+                  {width > 600 && (
+                    <IconContext.Provider
+                      value={{
+                        size: "1.3rem",
+                        style: {
+                          verticalAlign: "middle",
+                          marginBottom: "0.2rem",
+                          marginLeft: "0.3rem",
+                        },
+                      }}
+                    >
+                      <EpisodeLinks
+                        to={
+                          "/watch" +
+                          episodeLinks[0].baseEpisodeLink +
+                          (parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) +
+                            1)
+                        }
+                        style={
+                          episodeLinks[0].numOfEpisodes ===
+                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ? {
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
+                            : {}
+                        }
+                      >
+                        Next
+                        <HiArrowSmRight />
+                      </EpisodeLinks>
+                    </IconContext.Provider>
+                  )}
                 </EpisodeButtons>
                 <ServerWrapper>
                   <div className="server-wrapper">
@@ -270,23 +359,44 @@ function WatchAnime() {
                 </ServerWrapper>
                 <EpisodesWrapper>
                   <p>Episodes</p>
-                  <Episodes>
-                    {episodeLinks[0].episodes.map((item, i) => (
-                      <EpisodeLink
-                        to={"/watch" + item}
-                        style={
-                          parseInt(
-                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ) ===
-                          i + 1
-                            ? { backgroundColor: "#7676ff" }
-                            : {}
-                        }
-                      >
-                        Episode {i + 1}
-                      </EpisodeLink>
-                    ))}
-                  </Episodes>
+                  {width <= 600 && (
+                    <Episodes>
+                      {episodeLinks[0].episodes.map((item, i) => (
+                        <EpisodeLink
+                          to={"/watch" + item}
+                          style={
+                            parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) ===
+                            i + 1
+                              ? { backgroundColor: "#7676ff" }
+                              : {}
+                          }
+                        >
+                          {i + 1}
+                        </EpisodeLink>
+                      ))}
+                    </Episodes>
+                  )}
+                  {width > 600 && (
+                    <Episodes>
+                      {episodeLinks[0].episodes.map((item, i) => (
+                        <EpisodeLink
+                          to={"/watch" + item}
+                          style={
+                            parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) ===
+                            i + 1
+                              ? { backgroundColor: "#7676ff" }
+                              : {}
+                          }
+                        >
+                          Episode {i + 1}
+                        </EpisodeLink>
+                      ))}
+                    </Episodes>
+                  )}
                 </EpisodesWrapper>
               </div>
             </div>
@@ -306,6 +416,7 @@ const IframeWrapper = styled.div`
   border-radius: 0.5rem;
   box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.6);
   background-image: url("https://i.ibb.co/28yS92Z/If-the-video-does-not-load-please-refresh-the-page.png");
+  background-size: 23rem;
   background-repeat: no-repeat;
   background-position: center;
 
@@ -315,6 +426,11 @@ const IframeWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  @media screen and (max-width: 600px) {
+    padding-bottom: 66.3%;
+    background-size: 13rem;
   }
 `;
 
@@ -340,6 +456,10 @@ const Episodes = styled.div`
   grid-gap: 1rem;
   grid-row-gap: 1rem;
   justify-content: space-between;
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+  }
 `;
 
 const EpisodeLink = styled(Link)`
@@ -394,10 +514,19 @@ const ServerWrapper = styled.div`
     font-family: "Gilroy-Medium", sans-serif;
     font-size: 0.9rem;
   }
+
+  @media screen and (max-width: 600px) {
+    p {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 const Wrapper = styled.div`
   margin: 2rem 5rem 2rem 5rem;
+  @media screen and (max-width: 600px) {
+    margin: 1rem;
+  }
 `;
 
 const EpisodeButtons = styled.div`
@@ -415,6 +544,11 @@ const EpisodeLinks = styled(Link)`
   text-decoration: none;
   font-family: "Gilroy-Medium", sans-serif;
   border-radius: 0.4rem;
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+    border-radius: 50%;
+  }
 `;
 
 const Titles = styled.div`
@@ -440,6 +574,17 @@ const Titles = styled.div`
     color: white;
     padding: 0.7rem 1.1rem 0.7rem 1.5rem;
     border-radius: 0.4rem;
+  }
+  @media screen and (max-width: 600px) {
+    margin-bottom: 1rem;
+    p {
+      font-size: 1.3rem;
+    }
+    a {
+      padding: 0.7rem;
+      border-radius: 50%;
+      margin-left: 1rem;
+    }
   }
 `;
 

@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 function WatchAnimeSkeleton() {
+  const { width, height } = useWindowDimensions();
+
   return (
     <div>
       <Wrapper>
@@ -19,7 +22,7 @@ function WatchAnimeSkeleton() {
           highlightColor={"#34324D"}
           style={{
             marginBottom: "1rem",
-            aspectRatio: "16 / 9",
+            aspectRatio: width <= 600 ? "16 / 11" : "16 / 9",
           }}
         />
         <Skeleton
@@ -36,8 +39,8 @@ function WatchAnimeSkeleton() {
             {[...Array(7)].map((x, i) => (
               <div>
                 <Skeleton
-                  width={"10rem"}
-                  height={40}
+                  width={width <= 600 ? "5rem" : "10rem"}
+                  height={width <= 600 ? 55 : 40}
                   borderRadius={"0.5rem"}
                   baseColor={"#262539"}
                   highlightColor={"#34324D"}
@@ -52,8 +55,8 @@ function WatchAnimeSkeleton() {
             {[...Array(20)].map((x, i) => (
               <div>
                 <Skeleton
-                  width={"10rem"}
-                  height={40}
+                  width={width <= 600 ? "5rem" : "10rem"}
+                  height={width <= 600 ? 55 : 40}
                   borderRadius={"0.5rem"}
                   baseColor={"#262539"}
                   highlightColor={"#34324D"}
@@ -73,6 +76,10 @@ const Episodes = styled.div`
   grid-gap: 1rem;
   grid-row-gap: 1rem;
   justify-content: space-between;
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+  }
 `;
 
 const EpisodesWrapper = styled.div`
@@ -93,6 +100,10 @@ const EpisodesWrapper = styled.div`
 
 const Wrapper = styled.div`
   margin: 2rem 5rem 2rem 5rem;
+
+  @media screen and (max-width: 600px) {
+    margin: 1rem;
+  }
 `;
 
 export default WatchAnimeSkeleton;
