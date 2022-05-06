@@ -50,8 +50,12 @@ function AnimeCardsSkeleton() {
         {[...Array(8)].map((x, i) => (
           <SwiperSlide>
             <Skeleton
-              width={width <= 600 ? "120px" : "160px"}
-              height={width <= 600 ? "180px" : "235px"}
+              width={
+                width <= 600 ? (width <= 400 ? "100px" : "120px") : "160px"
+              }
+              height={
+                width <= 600 ? (width <= 400 ? "160px" : "180px") : "235px"
+              }
               borderRadius={"0.5rem"}
               baseColor={"#262539"}
               highlightColor={"#34324D"}

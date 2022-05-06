@@ -96,6 +96,10 @@ const Wrapper = styled.div`
       width: 120px;
       height: 180px;
     }
+    @media screen and (max-width: 400px) {
+      width: 100px;
+      height: 160px;
+    }
   }
 
   p {
