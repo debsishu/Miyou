@@ -2,7 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import { BiArrowToBottom } from "react-icons/bi";
+import {
+  BiArrowToBottom,
+  BiFullscreen,
+  BiExitFullscreen,
+} from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
@@ -15,6 +19,7 @@ function WatchAnime() {
   const [currentServer, setCurrentServer] = useState("");
   const [loading, setLoading] = useState(true);
   const { width, height } = useWindowDimensions();
+  const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
     getEpisodeLinks();
@@ -29,6 +34,18 @@ function WatchAnime() {
     setLoading(false);
     setEpisodeLinks(res.data);
     setCurrentServer(res.data[0].vidstreaming);
+  }
+
+  function fullScreenHandler(e) {
+    setFullScreen(!fullScreen);
+    let video = document.getElementById("video");
+
+    if (!document.fullscreenElement) {
+      video.requestFullscreen();
+      window.screen.orientation.lock("landscape-primary");
+    } else {
+      document.exitFullscreen();
+    }
   }
 
   return (
@@ -95,6 +112,7 @@ function WatchAnime() {
               <div>
                 <IframeWrapper>
                   <iframe
+                    id="video"
                     title={episodeLinks[0].title}
                     src={currentServer}
                     allowfullscreen="true"
@@ -103,6 +121,22 @@ function WatchAnime() {
                     marginheight="0"
                     scrolling="no"
                   ></iframe>
+                  {width <= 600 && (
+                    <div>
+                      <IconContext.Provider
+                        value={{
+                          size: "1.8rem",
+                          color: "white",
+                          style: {
+                            verticalAlign: "middle",
+                            cursor: "pointer",
+                          },
+                        }}
+                      >
+                        <BiFullscreen onClick={(e) => fullScreenHandler(e)} />
+                      </IconContext.Provider>
+                    </div>
+                  )}
                 </IframeWrapper>
                 <EpisodeButtons>
                   {width <= 600 && (
@@ -426,6 +460,12 @@ const IframeWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  div {
+    position: absolute;
+    z-index: 10;
+    padding: 1rem;
   }
 
   @media screen and (max-width: 600px) {
