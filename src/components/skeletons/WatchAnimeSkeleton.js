@@ -33,22 +33,7 @@ function WatchAnimeSkeleton() {
             marginBottom: "1rem",
           }}
         />
-        <EpisodesWrapper>
-          <p>Servers List</p>
-          <Episodes>
-            {[...Array(7)].map((x, i) => (
-              <div>
-                <Skeleton
-                  width={width <= 600 ? "5rem" : "10rem"}
-                  height={width <= 600 ? 55 : 40}
-                  borderRadius={"0.5rem"}
-                  baseColor={"#262539"}
-                  highlightColor={"#34324D"}
-                />
-              </div>
-            ))}
-          </Episodes>
-        </EpisodesWrapper>
+        <Skeleton baseColor={"#262539"} highlightColor={"#34324D"} />
         <EpisodesWrapper>
           <p>Episodes</p>
           <Episodes>

@@ -19,7 +19,7 @@ function Home() {
   async function getImages() {
     window.scrollTo(0, 0);
     let result = await axios.get(
-      "https://miyou-api.herokuapp.com/api/trending?page=1&count=10"
+      "https://miyou-api.herokuapp.com/api/trending?page=1&count=15"
     );
     setImages(result.data.data.Page.media);
     setLoading(false);

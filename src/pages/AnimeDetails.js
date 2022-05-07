@@ -43,7 +43,7 @@ function AnimeDetails() {
                   animeDetails[0].anilistResponse !== "NONE" &&
                   animeDetails[0].anilistResponse.anilistBannerImage !== null
                     ? animeDetails[0].anilistResponse.anilistBannerImage
-                    : "https://wallpapercave.com/wp/wp8048984.jpg"
+                    : "https://cdn.wallpapersafari.com/41/44/6Q9Nwh.jpg"
                 }
                 alt=""
               />
@@ -264,6 +264,8 @@ const ContentWrapper = styled.div`
 `;
 
 const Poster = styled.div`
+  display: flex;
+  flex-direction: column;
   img {
     width: 220px;
     height: 300px;
@@ -290,7 +292,7 @@ const Button = styled(Link)`
   font-family: "Gilroy-Bold", sans-serif;
   border-radius: 0.4rem;
   position: relative;
-  top: -20%;
+  top: -25%;
   white-space: nowrap;
 
   @media screen and (max-width: 600px) {

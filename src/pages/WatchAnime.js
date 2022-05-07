@@ -2,15 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import {
-  BiArrowToBottom,
-  BiFullscreen,
-  BiExitFullscreen,
-} from "react-icons/bi";
+import { BiArrowToBottom, BiFullscreen } from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { IconContext } from "react-icons";
 import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import VideoPlayer from "../components/VideoPlayer/VideoPlayer";
 
 function WatchAnime() {
   let episodeSlug = useParams().episode;
@@ -20,6 +17,7 @@ function WatchAnime() {
   const [loading, setLoading] = useState(true);
   const { width, height } = useWindowDimensions();
   const [fullScreen, setFullScreen] = useState(false);
+  const [internalPlayer, setInternalPlayer] = useState(true);
 
   useEffect(() => {
     getEpisodeLinks();
@@ -34,6 +32,12 @@ function WatchAnime() {
     setLoading(false);
     setEpisodeLinks(res.data);
     setCurrentServer(res.data[0].vidstreaming);
+    if (
+      res.data[0].sources.sources !== null ||
+      res.data[0].sources.sources !== undefined
+    ) {
+      setInternalPlayer(true);
+    }
   }
 
   function fullScreenHandler(e) {
@@ -55,89 +59,97 @@ function WatchAnime() {
         <Wrapper>
           {episodeLinks.length > 0 && currentServer !== "" && (
             <div>
-              <Titles>
-                <p>
-                  <span>
-                    {episodeLinks[0].titleName.substring(
-                      0,
-                      episodeLinks[0].titleName.indexOf("Episode")
-                    )}
-                  </span>{" "}
-                  -
-                  {" " +
-                    episodeLinks[0].titleName.substring(
-                      episodeLinks[0].titleName.indexOf("Episode")
-                    )}
-                </p>
-                {width <= 600 && (
-                  <IconContext.Provider
-                    value={{
-                      size: "1.8rem",
-                      style: {
-                        verticalAlign: "middle",
-                      },
-                    }}
-                  >
-                    <a
-                      href={episodeLinks[0].downloadLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <BiArrowToBottom />
-                    </a>
-                  </IconContext.Provider>
-                )}
-                {width > 600 && (
-                  <IconContext.Provider
-                    value={{
-                      size: "1.2rem",
-                      style: {
-                        verticalAlign: "middle",
-                        marginBottom: "0.2rem",
-                        marginLeft: "0.3rem",
-                      },
-                    }}
-                  >
-                    <a
-                      href={episodeLinks[0].downloadLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Download
-                      <BiArrowToBottom />
-                    </a>
-                  </IconContext.Provider>
-                )}
-              </Titles>
               <div>
-                <IframeWrapper>
-                  <iframe
-                    id="video"
-                    title={episodeLinks[0].title}
-                    src={currentServer}
-                    allowfullscreen="true"
-                    frameborder="0"
-                    marginwidth="0"
-                    marginheight="0"
-                    scrolling="no"
-                  ></iframe>
+                <Titles>
+                  <p>
+                    <span>
+                      {episodeLinks[0].titleName.substring(
+                        0,
+                        episodeLinks[0].titleName.indexOf("Episode")
+                      )}
+                    </span>{" "}
+                    -
+                    {" " +
+                      episodeLinks[0].titleName.substring(
+                        episodeLinks[0].titleName.indexOf("Episode")
+                      )}
+                  </p>
                   {width <= 600 && (
-                    <div>
-                      <IconContext.Provider
-                        value={{
-                          size: "1.8rem",
-                          color: "white",
-                          style: {
-                            verticalAlign: "middle",
-                            cursor: "pointer",
-                          },
-                        }}
+                    <IconContext.Provider
+                      value={{
+                        size: "1.8rem",
+                        style: {
+                          verticalAlign: "middle",
+                        },
+                      }}
+                    >
+                      <a
+                        href={episodeLinks[0].downloadLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <BiFullscreen onClick={(e) => fullScreenHandler(e)} />
-                      </IconContext.Provider>
-                    </div>
+                        <BiArrowToBottom />
+                      </a>
+                    </IconContext.Provider>
                   )}
-                </IframeWrapper>
+                  {width > 600 && (
+                    <IconContext.Provider
+                      value={{
+                        size: "1.2rem",
+                        style: {
+                          verticalAlign: "middle",
+                          marginBottom: "0.2rem",
+                          marginLeft: "0.3rem",
+                        },
+                      }}
+                    >
+                      <a
+                        href={episodeLinks[0].downloadLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Download
+                        <BiArrowToBottom />
+                      </a>
+                    </IconContext.Provider>
+                  )}
+                </Titles>
+              </div>
+
+              <div>
+                {internalPlayer && (
+                  <VideoPlayer sources={episodeLinks[0].sources} />
+                )}
+                {!internalPlayer && (
+                  <IframeWrapper>
+                    <iframe
+                      id="video"
+                      title={episodeLinks[0].title}
+                      src={currentServer}
+                      allowfullscreen="true"
+                      frameborder="0"
+                      marginwidth="0"
+                      marginheight="0"
+                      scrolling="no"
+                    ></iframe>
+                    {width <= 600 && (
+                      <div>
+                        <IconContext.Provider
+                          value={{
+                            size: "1.8rem",
+                            color: "white",
+                            style: {
+                              verticalAlign: "middle",
+                              cursor: "pointer",
+                            },
+                          }}
+                        >
+                          <BiFullscreen onClick={(e) => fullScreenHandler(e)} />
+                        </IconContext.Provider>
+                      </div>
+                    )}
+                  </IframeWrapper>
+                )}
                 <EpisodeButtons>
                   {width <= 600 && (
                     <IconContext.Provider
@@ -236,6 +248,7 @@ function WatchAnime() {
                       </EpisodeLinks>
                     </IconContext.Provider>
                   )}
+
                   {width > 600 && (
                     <IconContext.Provider
                       value={{
@@ -272,125 +285,135 @@ function WatchAnime() {
                     </IconContext.Provider>
                   )}
                 </EpisodeButtons>
-                <ServerWrapper>
-                  <div className="server-wrapper">
-                    <p>Servers List</p>
-                    <div className="serverlinks">
-                      {episodeLinks[0].vidstreaming !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].vidstreaming);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].vidstreaming
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          VIDSTREAMING
-                        </button>
-                      )}
-                      {episodeLinks[0].streamsb !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].streamsb);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].streamsb
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          STREAMSB
-                        </button>
-                      )}
-                      {episodeLinks[0].gogoserver !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].gogoserver);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].gogoserver
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          GOGOSERVER
-                        </button>
-                      )}
-                      {episodeLinks[0].xstreamcdn !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].xstreamcdn);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].xstreamcdn
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          XSTREAMCDN
-                        </button>
-                      )}
-                      {episodeLinks[0].mixdrop !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].mixdrop);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].mixdrop
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          MIXDROP
-                        </button>
-                      )}
-                      {episodeLinks[0].mp4upload !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].mp4upload);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].mp4upload
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          MP4UPLOAD
-                        </button>
-                      )}
-                      {episodeLinks[0].doodstream !== null && (
-                        <button
-                          onClick={() => {
-                            setCurrentServer(episodeLinks[0].doodstream);
-                          }}
-                          style={
-                            currentServer === episodeLinks[0].doodstream
-                              ? {
-                                  backgroundColor: "#7676ff",
-                                }
-                              : {}
-                          }
-                        >
-                          DOODSTREAM
-                        </button>
-                      )}
+                <ServerChange>
+                  <p>
+                    <button onClick={() => setInternalPlayer(!internalPlayer)}>
+                      Click Here
+                    </button>{" "}
+                    to switch video players (Might Contain Ads)
+                  </p>
+                </ServerChange>
+                {!internalPlayer && (
+                  <ServerWrapper>
+                    <div className="server-wrapper">
+                      <p>Servers List</p>
+                      <div className="serverlinks">
+                        {episodeLinks[0].vidstreaming !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].vidstreaming);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].vidstreaming
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            VIDSTREAMING
+                          </button>
+                        )}
+                        {episodeLinks[0].streamsb !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].streamsb);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].streamsb
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            STREAMSB
+                          </button>
+                        )}
+                        {episodeLinks[0].gogoserver !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].gogoserver);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].gogoserver
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            GOGOSERVER
+                          </button>
+                        )}
+                        {episodeLinks[0].xstreamcdn !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].xstreamcdn);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].xstreamcdn
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            XSTREAMCDN
+                          </button>
+                        )}
+                        {episodeLinks[0].mixdrop !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].mixdrop);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].mixdrop
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            MIXDROP
+                          </button>
+                        )}
+                        {episodeLinks[0].mp4upload !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].mp4upload);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].mp4upload
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            MP4UPLOAD
+                          </button>
+                        )}
+                        {episodeLinks[0].doodstream !== undefined && (
+                          <button
+                            onClick={() => {
+                              setCurrentServer(episodeLinks[0].doodstream);
+                            }}
+                            style={
+                              currentServer === episodeLinks[0].doodstream
+                                ? {
+                                    backgroundColor: "#7676ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            DOODSTREAM
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </ServerWrapper>
+                  </ServerWrapper>
+                )}
                 <EpisodesWrapper>
                   <p>Episodes</p>
                   {width <= 600 && (
@@ -625,6 +648,26 @@ const Titles = styled.div`
       border-radius: 50%;
       margin-left: 1rem;
     }
+  }
+`;
+
+const ServerChange = styled.div`
+  color: white;
+  margin-bottom: 1rem;
+  p {
+    font-size: 1rem;
+    font-family: "Gilroy-Light", sans-serif;
+    color: #b5c3de;
+  }
+  button {
+    text-decoration: underline;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    font-family: "Gilroy-Bold", sans-serif;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
   }
 `;
 
