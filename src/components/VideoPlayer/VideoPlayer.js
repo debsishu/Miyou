@@ -49,7 +49,7 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
             span.innerHTML = `Auto`;
           }
         });
-        // let player = new plyr(video, defaultOptions);
+        let player = new plyr(video, defaultOptions);
         setPlayer(new plyr(video, defaultOptions));
         player.on("enterfullscreen", (event) => {
           window.screen.orientation.lock("landscape");
