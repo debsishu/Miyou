@@ -33,7 +33,6 @@ function WatchAnimeSkeleton() {
             marginBottom: "1rem",
           }}
         />
-        <Skeleton baseColor={"#262539"} highlightColor={"#34324D"} />
         <EpisodesWrapper>
           <p>Episodes</p>
           <Episodes>

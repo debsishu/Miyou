@@ -1,11 +1,23 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { BsSkipEnd } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import styled from "styled-components";
 import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 
-function VideoPlayer({ sources }) {
-  const src = sources.sources[0].file;
+function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
+  let src = sources.sources[0].file;
+  if (src.includes("mp4")) {
+    src = sources.sources_bk[0].file;
+  }
+  const [player, setPlayer] = useState(null);
+
+  function skipIntro() {
+    player.forward(85);
+  }
+
   useEffect(() => {
     const video = document.getElementById("player");
 
@@ -37,7 +49,8 @@ function VideoPlayer({ sources }) {
             span.innerHTML = `Auto`;
           }
         });
-        let player = new plyr(video, defaultOptions);
+        // let player = new plyr(video, defaultOptions);
+        setPlayer(new plyr(video, defaultOptions));
         player.on("enterfullscreen", (event) => {
           window.screen.orientation.lock("landscape");
         });
@@ -84,9 +97,99 @@ function VideoPlayer({ sources }) {
         "--plyr-color-main": "#7676FF",
       }}
     >
+      <Conttainer>
+        <IconContext.Provider
+          value={{
+            size: "1.5rem",
+            color: "white",
+            style: {
+              verticalAlign: "middle",
+            },
+          }}
+        >
+          {internalPlayer && <p>Internal Player</p>}
+          <div>
+            <div className="tooltip">
+              <button onClick={() => setInternalPlayer(!internalPlayer)}>
+                <HiOutlineSwitchHorizontal />
+              </button>
+              <span className="tooltiptext">Change Server</span>
+            </div>
+            <div className="tooltip">
+              <button onClick={() => skipIntro()}>
+                <BsSkipEnd />
+              </button>
+              <span className="tooltiptext">Skip Intro</span>
+            </div>
+          </div>
+        </IconContext.Provider>
+      </Conttainer>
       <video id="player" playsInline></video>
     </div>
   );
 }
+
+const Conttainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #242235;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  border: 1px solid #393653;
+  margin-top: 1rem;
+  border-bottom: none;
+  font-family: "Gilroy-Medium", sans-serif;
+  p {
+    color: white;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+`;
 
 export default VideoPlayer;

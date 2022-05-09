@@ -6,6 +6,7 @@ import axios from "axios";
 import AnimeCards from "../components/Home/AnimeCards";
 import HomeSkeleton from "../components/skeletons/CarouselSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import WatchingEpisodes from "../components/Home/WatchingEpisodes";
 
 function Home() {
   const [images, setImages] = useState([]);
@@ -24,6 +25,15 @@ function Home() {
     setImages(result.data.data.Page.media);
     setLoading(false);
   }
+
+  function checkSize() {
+    let lsData = localStorage.getItem("Animes");
+    lsData = JSON.parse(lsData);
+    if (lsData.Names.length === 0) {
+      return false;
+    }
+    return true;
+  }
   return (
     <div>
       <HomeDiv>
@@ -32,6 +42,16 @@ function Home() {
         </HomeHeading>
         {loading && <HomeSkeleton />}
         {!loading && <Carousel images={images} />}
+        {localStorage.getItem("Animes") && checkSize() && (
+          <div>
+            <HeadingWrapper>
+              <Heading>
+                <span>Continue</span> Watching
+              </Heading>
+            </HeadingWrapper>
+            <WatchingEpisodes />
+          </div>
+        )}
         <div>
           <HeadingWrapper>
             <Heading>

@@ -11,6 +11,7 @@ function AnimeDetails() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const { height, width } = useWindowDimensions();
+  const [localStorageDetails, setLocalStorageDetails] = useState(0);
 
   useEffect(() => {
     getAnimeDetails();
@@ -25,10 +26,26 @@ function AnimeDetails() {
     );
     setLoading(false);
     setAnimeDetails(res.data);
+    getLocalStorage(res.data);
   }
 
   function readMoreHandler() {
     setExpanded(!expanded);
+  }
+
+  function getLocalStorage(animeDetails) {
+    if (localStorage.getItem("Animes")) {
+      let lsData = localStorage.getItem("Animes");
+      lsData = JSON.parse(lsData);
+
+      let index = lsData.Names.findIndex(
+        (i) => i.name === animeDetails[0].gogoResponse.title
+      );
+
+      if (index !== -1) {
+        setLocalStorageDetails(lsData.Names[index].currentEpisode);
+      }
+    }
   }
 
   return (
@@ -50,11 +67,25 @@ function AnimeDetails() {
               <ContentWrapper>
                 <Poster>
                   <img src={animeDetails[0].gogoResponse.image} alt="" />
-                  <Button
-                    to={"/watch" + animeDetails[0].gogoResponse.episodes[0]}
-                  >
-                    Watch Now
-                  </Button>
+                  {localStorageDetails === 0 && (
+                    <Button
+                      to={"/watch" + animeDetails[0].gogoResponse.episodes[0]}
+                    >
+                      Watch Now
+                    </Button>
+                  )}
+                  {localStorageDetails !== 0 && (
+                    <Button
+                      to={
+                        "/watch" +
+                        animeDetails[0].gogoResponse.episodes[
+                          localStorageDetails - 1
+                        ]
+                      }
+                    >
+                      EP - {localStorageDetails}
+                    </Button>
+                  )}
                 </Poster>
                 <div>
                   <h1>{animeDetails[0].gogoResponse.title}</h1>
@@ -121,14 +152,30 @@ function AnimeDetails() {
                 {width <= 600 && (
                   <Episodes>
                     {animeDetails[0].gogoResponse.episodes.map((item, i) => (
-                      <EpisodeLink to={"/watch" + item}>{i + 1}</EpisodeLink>
+                      <EpisodeLink
+                        style={
+                          i < localStorageDetails - 1
+                            ? { backgroundColor: "#7676ff" }
+                            : {}
+                        }
+                        to={"/watch" + item}
+                      >
+                        {i + 1}
+                      </EpisodeLink>
                     ))}
                   </Episodes>
                 )}
                 {width > 600 && (
                   <Episodes>
                     {animeDetails[0].gogoResponse.episodes.map((item, i) => (
-                      <EpisodeLink to={"/watch" + item}>
+                      <EpisodeLink
+                        style={
+                          i < localStorageDetails - 1
+                            ? { backgroundColor: "#7676ff" }
+                            : {}
+                        }
+                        to={"/watch" + item}
+                      >
                         Episode {i + 1}
                       </EpisodeLink>
                     ))}

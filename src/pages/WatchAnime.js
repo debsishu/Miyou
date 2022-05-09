@@ -4,10 +4,13 @@ import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import { BiArrowToBottom, BiFullscreen } from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { BsSkipEnd } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import VideoPlayer from "../components/VideoPlayer/VideoPlayer";
+import ServersList from "../components/WatchAnime/ServersList";
 
 function WatchAnime() {
   let episodeSlug = useParams().episode;
@@ -18,6 +21,7 @@ function WatchAnime() {
   const { width, height } = useWindowDimensions();
   const [fullScreen, setFullScreen] = useState(false);
   const [internalPlayer, setInternalPlayer] = useState(true);
+  const [localStorageDetails, setLocalStorageDetails] = useState(0);
 
   useEffect(() => {
     getEpisodeLinks();
@@ -38,6 +42,28 @@ function WatchAnime() {
     ) {
       setInternalPlayer(true);
     }
+    updateLocalStorage(episodeSlug, res.data);
+    getLocalStorage(
+      res.data[0].titleName.substring(
+        0,
+        res.data[0].titleName.indexOf("Episode")
+      )
+    );
+  }
+
+  function getLocalStorage(animeDetails) {
+    animeDetails = animeDetails.substring(0, animeDetails.length - 1);
+
+    if (localStorage.getItem("Animes")) {
+      let lsData = localStorage.getItem("Animes");
+      lsData = JSON.parse(lsData);
+
+      let index = lsData.Names.findIndex((i) => i.name === animeDetails);
+
+      if (index !== -1) {
+        setLocalStorageDetails(lsData.Names[index].currentEpisode);
+      }
+    }
   }
 
   function fullScreenHandler(e) {
@@ -49,6 +75,43 @@ function WatchAnime() {
       window.screen.orientation.lock("landscape-primary");
     } else {
       document.exitFullscreen();
+    }
+  }
+
+  function updateLocalStorage(episode, episodeLinks) {
+    let episodeNum = episode.replace(/.*?(\d+)[^\d]*$/, "$1");
+    let animeName = episodeLinks[0].titleName.substring(
+      0,
+      episodeLinks[0].titleName.indexOf("Episode")
+    );
+    animeName = animeName.substring(0, animeName.length - 1);
+    if (localStorage.getItem("Animes")) {
+      let lsData = localStorage.getItem("Animes");
+      lsData = JSON.parse(lsData);
+
+      let index = lsData.Names.findIndex((i) => i.name === animeName);
+      if (index !== -1) {
+        lsData.Names.splice(index, 1);
+        lsData.Names.unshift({
+          name: animeName,
+          currentEpisode: episodeNum,
+          episodeLink: episodeSlug,
+        });
+      } else {
+        lsData.Names.unshift({
+          name: animeName,
+          currentEpisode: episodeNum,
+          episodeLink: episodeSlug,
+        });
+      }
+      lsData = JSON.stringify(lsData);
+      localStorage.setItem("Animes", lsData);
+    } else {
+      let data = {
+        Names: [],
+      };
+      data = JSON.stringify(data);
+      localStorage.setItem("Animes", data);
     }
   }
 
@@ -118,37 +181,68 @@ function WatchAnime() {
 
               <div>
                 {internalPlayer && (
-                  <VideoPlayer sources={episodeLinks[0].sources} />
+                  <VideoPlayer
+                    sources={episodeLinks[0].sources}
+                    internalPlayer={internalPlayer}
+                    setInternalPlayer={setInternalPlayer}
+                  />
                 )}
                 {!internalPlayer && (
-                  <IframeWrapper>
-                    <iframe
-                      id="video"
-                      title={episodeLinks[0].title}
-                      src={currentServer}
-                      allowfullscreen="true"
-                      frameborder="0"
-                      marginwidth="0"
-                      marginheight="0"
-                      scrolling="no"
-                    ></iframe>
-                    {width <= 600 && (
-                      <div>
-                        <IconContext.Provider
-                          value={{
-                            size: "1.8rem",
-                            color: "white",
-                            style: {
-                              verticalAlign: "middle",
-                              cursor: "pointer",
-                            },
-                          }}
-                        >
-                          <BiFullscreen onClick={(e) => fullScreenHandler(e)} />
-                        </IconContext.Provider>
-                      </div>
-                    )}
-                  </IframeWrapper>
+                  <div>
+                    <Conttainer>
+                      <IconContext.Provider
+                        value={{
+                          size: "1.5rem",
+                          color: "white",
+                          style: {
+                            verticalAlign: "middle",
+                          },
+                        }}
+                      >
+                        <p>External Player (Contain Ads)</p>
+                        <div>
+                          <div className="tooltip">
+                            <button
+                              onClick={() => setInternalPlayer(!internalPlayer)}
+                            >
+                              <HiOutlineSwitchHorizontal />
+                            </button>
+                            <span className="tooltiptext">Change Server</span>
+                          </div>
+                        </div>
+                      </IconContext.Provider>
+                    </Conttainer>
+                    <IframeWrapper>
+                      <iframe
+                        id="video"
+                        title={episodeLinks[0].title}
+                        src={currentServer}
+                        allowfullscreen="true"
+                        frameborder="0"
+                        marginwidth="0"
+                        marginheight="0"
+                        scrolling="no"
+                      ></iframe>
+                      {width <= 600 && (
+                        <div>
+                          <IconContext.Provider
+                            value={{
+                              size: "1.8rem",
+                              color: "white",
+                              style: {
+                                verticalAlign: "middle",
+                                cursor: "pointer",
+                              },
+                            }}
+                          >
+                            <BiFullscreen
+                              onClick={(e) => fullScreenHandler(e)}
+                            />
+                          </IconContext.Provider>
+                        </div>
+                      )}
+                    </IframeWrapper>
+                  </div>
                 )}
                 <EpisodeButtons>
                   {width <= 600 && (
@@ -285,134 +379,12 @@ function WatchAnime() {
                     </IconContext.Provider>
                   )}
                 </EpisodeButtons>
-                <ServerChange>
-                  <p>
-                    <button onClick={() => setInternalPlayer(!internalPlayer)}>
-                      Click Here
-                    </button>{" "}
-                    to switch video players (Might Contain Ads)
-                  </p>
-                </ServerChange>
                 {!internalPlayer && (
-                  <ServerWrapper>
-                    <div className="server-wrapper">
-                      <p>Servers List</p>
-                      <div className="serverlinks">
-                        {episodeLinks[0].vidstreaming !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].vidstreaming);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].vidstreaming
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            VIDSTREAMING
-                          </button>
-                        )}
-                        {episodeLinks[0].streamsb !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].streamsb);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].streamsb
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            STREAMSB
-                          </button>
-                        )}
-                        {episodeLinks[0].gogoserver !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].gogoserver);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].gogoserver
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            GOGOSERVER
-                          </button>
-                        )}
-                        {episodeLinks[0].xstreamcdn !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].xstreamcdn);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].xstreamcdn
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            XSTREAMCDN
-                          </button>
-                        )}
-                        {episodeLinks[0].mixdrop !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].mixdrop);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].mixdrop
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            MIXDROP
-                          </button>
-                        )}
-                        {episodeLinks[0].mp4upload !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].mp4upload);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].mp4upload
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            MP4UPLOAD
-                          </button>
-                        )}
-                        {episodeLinks[0].doodstream !== undefined && (
-                          <button
-                            onClick={() => {
-                              setCurrentServer(episodeLinks[0].doodstream);
-                            }}
-                            style={
-                              currentServer === episodeLinks[0].doodstream
-                                ? {
-                                    backgroundColor: "#7676ff",
-                                  }
-                                : {}
-                            }
-                          >
-                            DOODSTREAM
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </ServerWrapper>
+                  <ServersList
+                    episodeLinks={episodeLinks}
+                    currentServer={currentServer}
+                    setCurrentServer={setCurrentServer}
+                  />
                 )}
                 <EpisodesWrapper>
                   <p>Episodes</p>
@@ -425,7 +397,7 @@ function WatchAnime() {
                             parseInt(
                               episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
                             ) ===
-                            i + 1
+                              i + 1 || i < localStorageDetails
                               ? { backgroundColor: "#7676ff" }
                               : {}
                           }
@@ -444,7 +416,7 @@ function WatchAnime() {
                             parseInt(
                               episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
                             ) ===
-                            i + 1
+                              i + 1 || i < localStorageDetails
                               ? { backgroundColor: "#7676ff" }
                               : {}
                           }
@@ -464,13 +436,76 @@ function WatchAnime() {
   );
 }
 
+const Conttainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #242235;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  border: 1px solid #393653;
+  border-bottom: none;
+  margin-top: 1rem;
+  font-family: "Gilroy-Medium", sans-serif;
+  p {
+    color: white;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+`;
+
 const IframeWrapper = styled.div`
   position: relative;
   padding-bottom: 56.25%; /* proportion value to aspect ratio 16:9 (9 / 16 = 0.5625 or 56.25%) */
   height: 0;
   overflow: hidden;
   margin-bottom: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
   box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.6);
   background-image: url("https://i.ibb.co/28yS92Z/If-the-video-does-not-load-please-refresh-the-page.png");
   background-size: 23rem;
@@ -648,26 +683,6 @@ const Titles = styled.div`
       border-radius: 50%;
       margin-left: 1rem;
     }
-  }
-`;
-
-const ServerChange = styled.div`
-  color: white;
-  margin-bottom: 1rem;
-  p {
-    font-size: 1rem;
-    font-family: "Gilroy-Light", sans-serif;
-    color: #b5c3de;
-  }
-  button {
-    text-decoration: underline;
-    font-size: 1rem;
-    outline: none;
-    border: none;
-    font-family: "Gilroy-Bold", sans-serif;
-    background-color: transparent;
-    color: white;
-    cursor: pointer;
   }
 `;
 
