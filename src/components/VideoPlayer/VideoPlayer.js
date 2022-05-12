@@ -7,7 +7,7 @@ import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 
-function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
+function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
   let src = sources.sources[0].file;
   if (src.includes("mp4")) {
     src = sources.sources_bk[0].file;
@@ -20,6 +20,7 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
 
   useEffect(() => {
     const video = document.getElementById("player");
+    let flag = true;
 
     const defaultOptions = {
       captions: { active: true, update: true, language: "en" },
@@ -58,6 +59,31 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
         player.on("exitfullscreen", (event) => {
           window.screen.orientation.lock("portrait");
         });
+
+        player.on("timeupdate", function (e) {
+          var time = player.currentTime,
+            lastTime = localStorage.getItem(title);
+          if (time > lastTime) {
+            localStorage.setItem(title, Math.round(player.currentTime));
+          }
+          if (player.ended) {
+            localStorage.removeItem(title);
+          }
+        });
+
+        player.on("play", function (e) {
+          if (flag) {
+            var lastTime = localStorage.getItem(title);
+            if (lastTime !== null && lastTime > player.currentTime) {
+              player.forward(parseInt(lastTime));
+            }
+            flag = false;
+          }
+        });
+
+        player.on("seeking", (event) => {
+          localStorage.setItem(title, Math.round(player.currentTime));
+        });
       });
       hls.attachMedia(video);
       window.hls = hls;
@@ -89,6 +115,7 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer }) {
       };
     }
   }, []);
+
   return (
     <div
       style={{

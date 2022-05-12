@@ -185,6 +185,7 @@ function WatchAnime() {
                     sources={episodeLinks[0].sources}
                     internalPlayer={internalPlayer}
                     setInternalPlayer={setInternalPlayer}
+                    title={episodeLinks[0].titleName}
                   />
                 )}
                 {!internalPlayer && (

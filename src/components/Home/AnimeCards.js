@@ -31,7 +31,7 @@ function AnimeCards(props) {
           slidesPerView={7}
           spaceBetween={35}
           scrollbar={{
-            hide: true,
+            hide: false,
           }}
           breakpoints={{
             "@0.00": {
