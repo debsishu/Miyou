@@ -18,7 +18,7 @@ function SearchResults() {
     setLoading(true);
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `https://miyou-api.herokuapp.com/api/search?name=${urlParams}`
+      `https://miyou-api-nine.vercel.app/api/search?name=${urlParams}`
     );
     setLoading(false);
     setResults(res.data);

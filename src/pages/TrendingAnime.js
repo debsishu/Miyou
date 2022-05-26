@@ -15,7 +15,7 @@ function TrendingAnime() {
   async function getAnime() {
     window.scrollTo(0, 0);
     let res = await axios.get(
-      "https://miyou-api.herokuapp.com/api/trending?page=1&count=50"
+      "https://miyou-api-nine.vercel.app/api/trending?page=1&count=50"
     );
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);

@@ -31,7 +31,7 @@ function WatchAnime() {
     setLoading(true);
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `https://miyou-api.herokuapp.com/api/getlinks?link=/${episodeSlug}`
+      `https://miyou-api-nine.vercel.app/api/getlinks?link=/${episodeSlug}`
     );
     setLoading(false);
     setEpisodeLinks(res.data);
@@ -110,6 +110,11 @@ function WatchAnime() {
       let data = {
         Names: [],
       };
+      data.Names.push({
+        name: animeName,
+        currentEpisode: episodeNum,
+        episodeLink: episodeSlug,
+      });
       data = JSON.stringify(data);
       localStorage.setItem("Animes", data);
     }

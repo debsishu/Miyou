@@ -22,7 +22,7 @@ function AnimeDetails() {
     setExpanded(false);
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `https://miyou-api.herokuapp.com/api/getanime?link=/category/${slug}`
+      `https://miyou-api-nine.vercel.app/api/getanime?link=/category/${slug}`
     );
     setLoading(false);
     setAnimeDetails(res.data);
