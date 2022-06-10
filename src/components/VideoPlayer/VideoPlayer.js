@@ -101,6 +101,45 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
           });
         }
       }
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = src;
+      const defaultOptions = {
+        captions: { active: true, update: true, language: "en" },
+      };
+      let player = new plyr(video, defaultOptions);
+      setPlayer(new plyr(video, defaultOptions));
+      player.on("enterfullscreen", (event) => {
+        window.screen.orientation.lock("landscape");
+      });
+
+      player.on("exitfullscreen", (event) => {
+        window.screen.orientation.lock("portrait");
+      });
+
+      player.on("timeupdate", function (e) {
+        var time = player.currentTime,
+          lastTime = localStorage.getItem(title);
+        if (time > lastTime) {
+          localStorage.setItem(title, Math.round(player.currentTime));
+        }
+        if (player.ended) {
+          localStorage.removeItem(title);
+        }
+      });
+
+      player.on("play", function (e) {
+        if (flag) {
+          var lastTime = localStorage.getItem(title);
+          if (lastTime !== null && lastTime > player.currentTime) {
+            player.forward(parseInt(lastTime));
+          }
+          flag = false;
+        }
+      });
+
+      player.on("seeking", (event) => {
+        localStorage.setItem(title, Math.round(player.currentTime));
+      });
     } else {
       const player = new plyr(src, defaultOptions);
       player.source = {
