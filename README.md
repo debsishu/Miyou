@@ -1,6 +1,12 @@
-# Getting Started with Create React App
+## Install the dependencies
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `npm i`
+
+## Set up your .env file
+
+First add a .env file in your root directory. Then add `REACT_APP_BACKEND_URL='http://localhost:4000/'` (For this you have to run your own development server)
+
+Or you can add `REACT_APP_BACKEND_URL='https://miyou-api-temp.herokuapp.com/'`
 
 ## Available Scripts
 
