@@ -15,7 +15,7 @@ function Top100Anime() {
   async function getAnime() {
     window.scrollTo(0, 0);
     let res = await axios.get(
-      "https://miyou-api-nine.vercel.app/api/top100?page=1&count=50"
+      `${process.env.REACT_APP_BACKEND_URL}api/top100?page=1&count=50`
     );
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);

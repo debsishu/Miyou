@@ -18,7 +18,7 @@ function AnimeCards(props) {
 
   async function getData() {
     let res = await axios.get(
-      `https://miyou-api-nine.vercel.app/api/${props.criteria}?page=1&count=${props.count}`
+      `${process.env.REACT_APP_BACKEND_URL}api/${props.criteria}?page=1&count=${props.count}`
     );
     setLoading(false);
     setData(res.data.data.Page.media);

@@ -20,7 +20,7 @@ function Home() {
   async function getImages() {
     window.scrollTo(0, 0);
     let result = await axios.get(
-      "https://miyou-api-nine.vercel.app/api/trending?page=1&count=15"
+      `${process.env.REACT_APP_BACKEND_URL}api/trending?page=1&count=15`
     );
     setImages(result.data.data.Page.media);
     setLoading(false);

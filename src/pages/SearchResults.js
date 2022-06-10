@@ -18,7 +18,7 @@ function SearchResults() {
     setLoading(true);
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `https://miyou-api-nine.vercel.app/api/search?name=${urlParams}`
+      `${process.env.REACT_APP_BACKEND_URL}api/search?name=${urlParams}`
     );
     setLoading(false);
     setResults(res.data);

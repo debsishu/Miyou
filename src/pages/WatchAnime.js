@@ -31,7 +31,7 @@ function WatchAnime() {
     setLoading(true);
     window.scrollTo(0, 0);
     let res = await axios.get(
-      `https://miyou-api-nine.vercel.app/api/getlinks?link=/${episodeSlug}`
+      `${process.env.REACT_APP_BACKEND_URL}api/getlinks?link=/${episodeSlug}`
     );
     setLoading(false);
     setEpisodeLinks(res.data);
