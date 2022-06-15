@@ -190,7 +190,7 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
           </div>
         </IconContext.Provider>
       </Conttainer>
-      <video id="player" playsInline></video>
+      <video id="player" playsInline crossorigin="anonymous"></video>
     </div>
   );
 }
