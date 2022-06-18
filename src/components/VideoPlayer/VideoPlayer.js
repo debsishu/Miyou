@@ -24,6 +24,19 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
 
     const defaultOptions = {
       captions: { active: true, update: true, language: "en" },
+      controls: [
+        "play-large",
+        "rewind",
+        "play",
+        "fast-forward",
+        "progress",
+        "current-time",
+        "duration",
+        "mute",
+        "volume",
+        "settings",
+        "fullscreen",
+      ],
     };
 
     if (Hls.isSupported()) {
@@ -52,11 +65,24 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
         });
         let player = new plyr(video, defaultOptions);
         setPlayer(new plyr(video, defaultOptions));
+        let plyer;
+        var button = document.createElement("button");
+        button.classList.add("skip-button");
+        button.innerHTML = "Skip Intro";
+        button.addEventListener("click", function () {
+          player.forward(85);
+        });
+        player.on("ready", () => {
+          plyer = document.querySelector(".plyr__controls");
+        });
+
         player.on("enterfullscreen", (event) => {
+          plyer.appendChild(button);
           window.screen.orientation.lock("landscape");
         });
 
         player.on("exitfullscreen", (event) => {
+          document.querySelector(".skip-button").remove();
           window.screen.orientation.lock("portrait");
         });
 

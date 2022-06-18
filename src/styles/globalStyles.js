@@ -49,6 +49,25 @@ const GlobalStyle = createGlobalStyle`
 	.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
     bottom: 0px !important;
 	}
+
+	@media only screen and (max-width: 600px) {
+		.plyr button {
+			font-size: 0.8rem;
+		}
+	}
+
+	.skip-button {
+		padding: 0.3rem 1rem;
+		position: absolute;
+		top: -1.5rem;
+		right: 3rem;
+		border-radius: 0.3rem;
+		border: 1px solid rgba(255, 255, 255, 0.4);
+		outline: none;
+		cursor: pointer;
+		background-color: rgba(0, 0, 0, 0.6);
+		color: white;
+	}
 `;
 
 export default GlobalStyle;
