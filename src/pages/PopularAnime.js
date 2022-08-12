@@ -19,6 +19,7 @@ function PopularAnime() {
     );
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
+    document.title = "Popular Anime - Miyou"
   }
   return (
     <div>
