@@ -19,6 +19,7 @@ function TrendingAnime() {
     );
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
+    document.title = "Trending Anime - Miyou"
   }
   return (
     <div>
