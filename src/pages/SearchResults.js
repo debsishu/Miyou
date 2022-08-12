@@ -22,6 +22,7 @@ function SearchResults() {
     );
     setLoading(false);
     setResults(res.data);
+    document.title = urlParams + " - Miyou"
   }
   return (
     <div>
