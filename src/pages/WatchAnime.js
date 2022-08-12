@@ -35,6 +35,7 @@ function WatchAnime() {
     );
     setLoading(false);
     setEpisodeLinks(res.data);
+    document.title = res.data[0].titleName + " - Miyou"
     setCurrentServer(res.data[0].vidstreaming);
     if (
       res.data[0].sources.sources !== null ||
