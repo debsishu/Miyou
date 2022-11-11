@@ -9,39 +9,41 @@ function WatchAnimeSkeleton() {
   return (
     <div>
       <Wrapper>
-        <Skeleton
-          height={40}
-          baseColor={"#262539"}
-          highlightColor={"#34324D"}
-          style={{
-            marginBottom: "1rem",
-          }}
-        />
-        <Skeleton
-          baseColor={"#262539"}
-          highlightColor={"#34324D"}
-          style={{
-            marginBottom: "1rem",
-            aspectRatio: width <= 600 ? "16 / 11" : "16 / 9",
-          }}
-        />
-        <Skeleton
-          height={40}
-          baseColor={"#262539"}
-          highlightColor={"#34324D"}
-          style={{
-            marginBottom: "1rem",
-          }}
-        />
+        <div>
+          <Skeleton
+            height={40}
+            baseColor={"#262539"}
+            highlightColor={"#34324D"}
+            style={{
+              marginBottom: "1rem",
+            }}
+          />
+          <Skeleton
+            baseColor={"#262539"}
+            highlightColor={"#34324D"}
+            style={{
+              marginBottom: "1rem",
+              aspectRatio: width <= 600 ? "16 / 11" : "16 / 9",
+            }}
+          />
+          <Skeleton
+            height={40}
+            baseColor={"#262539"}
+            highlightColor={"#34324D"}
+            style={{
+              marginBottom: "1rem",
+            }}
+          />
+        </div>
         <EpisodesWrapper>
           <p>Episodes</p>
           <Episodes>
             {[...Array(20)].map((x, i) => (
               <div>
                 <Skeleton
-                  width={width <= 600 ? "5rem" : "10rem"}
-                  height={width <= 600 ? 55 : 40}
-                  borderRadius={"0.5rem"}
+                  width={"3rem"}
+                  height={45}
+                  borderRadius={"0.4rem"}
                   baseColor={"#262539"}
                   highlightColor={"#34324D"}
                 />
@@ -56,13 +58,13 @@ function WatchAnimeSkeleton() {
 
 const Episodes = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+  grid-gap: 0.8rem;
   grid-row-gap: 1rem;
   justify-content: space-between;
 
   @media screen and (max-width: 600px) {
-    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
   }
 `;
 
@@ -83,8 +85,14 @@ const EpisodesWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
-  margin: 2rem 5rem 2rem 5rem;
-
+  margin: 0.5rem 5rem 2rem 5rem;
+  display: grid;
+  grid-template-columns: 70% calc(30% - 1rem);
+  gap: 1rem;
+  align-items: flex-start;
+  @media screen and (max-width: 900px) {
+    grid-template-columns: auto;
+  }
   @media screen and (max-width: 600px) {
     margin: 1rem;
   }

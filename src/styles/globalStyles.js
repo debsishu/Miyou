@@ -17,6 +17,10 @@ const GlobalStyle = createGlobalStyle`
 		font-family: 'Gilroy-Regular', sans-serif;
 	}
 
+	:root {
+		color-scheme: dark;
+	}
+
 	::placeholder {
 		color: black;
 		opacity: 0.3;

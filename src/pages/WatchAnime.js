@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { BiArrowToBottom, BiFullscreen } from "react-icons/bi";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
-import { BsSkipEnd } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import WatchAnimeSkeleton from "../components/skeletons/WatchAnimeSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
@@ -35,7 +34,6 @@ function WatchAnime() {
     );
     setLoading(false);
     setEpisodeLinks(res.data);
-    document.title = res.data[0].titleName + " - Miyou"
     setCurrentServer(res.data[0].vidstreaming);
     if (
       res.data[0].sources.sources !== null ||
@@ -50,6 +48,12 @@ function WatchAnime() {
         res.data[0].titleName.indexOf("Episode")
       )
     );
+    document.title = `${res.data[0].titleName
+      .substring(res.data[0].titleName.indexOf("Episode"))
+      .replace("Episode", "EP")} - ${res.data[0].titleName.substring(
+      0,
+      res.data[0].titleName.indexOf("Episode")
+    )} - Miyou`;
   }
 
   function getLocalStorage(animeDetails) {
@@ -185,256 +189,238 @@ function WatchAnime() {
                 </Titles>
               </div>
 
-              <div>
-                {internalPlayer && (
-                  <VideoPlayer
-                    sources={episodeLinks[0].sources}
-                    internalPlayer={internalPlayer}
-                    setInternalPlayer={setInternalPlayer}
-                    title={episodeLinks[0].titleName}
-                  />
-                )}
-                {!internalPlayer && (
-                  <div>
-                    <Conttainer>
+              <VideoPlayerWrapper>
+                <div>
+                  {internalPlayer && (
+                    <VideoPlayer
+                      sources={episodeLinks[0].sources}
+                      internalPlayer={internalPlayer}
+                      setInternalPlayer={setInternalPlayer}
+                      title={episodeLinks[0].titleName}
+                    />
+                  )}
+                  {!internalPlayer && (
+                    <div>
+                      <Conttainer>
+                        <IconContext.Provider
+                          value={{
+                            size: "1.5rem",
+                            color: "white",
+                            style: {
+                              verticalAlign: "middle",
+                            },
+                          }}
+                        >
+                          <p>External Player (Contain Ads)</p>
+                          <div>
+                            <div className="tooltip">
+                              <button
+                                onClick={() =>
+                                  setInternalPlayer(!internalPlayer)
+                                }
+                              >
+                                <HiOutlineSwitchHorizontal />
+                              </button>
+                              <span className="tooltiptext">Change Server</span>
+                            </div>
+                          </div>
+                        </IconContext.Provider>
+                      </Conttainer>
+                      <IframeWrapper>
+                        <iframe
+                          id="video"
+                          title={episodeLinks[0].title}
+                          src={currentServer}
+                          allowfullscreen="true"
+                          frameborder="0"
+                          marginwidth="0"
+                          marginheight="0"
+                          scrolling="no"
+                        ></iframe>
+                        {width <= 600 && (
+                          <div>
+                            <IconContext.Provider
+                              value={{
+                                size: "1.8rem",
+                                color: "white",
+                                style: {
+                                  verticalAlign: "middle",
+                                  cursor: "pointer",
+                                },
+                              }}
+                            >
+                              <BiFullscreen
+                                onClick={(e) => fullScreenHandler(e)}
+                              />
+                            </IconContext.Provider>
+                          </div>
+                        )}
+                      </IframeWrapper>
+                    </div>
+                  )}
+                  <EpisodeButtons>
+                    {width <= 600 && (
                       <IconContext.Provider
                         value={{
-                          size: "1.5rem",
-                          color: "white",
+                          size: "1.8rem",
                           style: {
                             verticalAlign: "middle",
                           },
                         }}
                       >
-                        <p>External Player (Contain Ads)</p>
-                        <div>
-                          <div className="tooltip">
-                            <button
-                              onClick={() => setInternalPlayer(!internalPlayer)}
-                            >
-                              <HiOutlineSwitchHorizontal />
-                            </button>
-                            <span className="tooltiptext">Change Server</span>
-                          </div>
-                        </div>
+                        <EpisodeLinks
+                          to={
+                            "/watch" +
+                            episodeLinks[0].baseEpisodeLink +
+                            (parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) -
+                              1)
+                          }
+                          style={
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
+                              ? {
+                                  pointerEvents: "none",
+                                  color: "rgba(255,255,255, 0.2)",
+                                }
+                              : {}
+                          }
+                        >
+                          <HiArrowSmLeft />
+                        </EpisodeLinks>
                       </IconContext.Provider>
-                    </Conttainer>
-                    <IframeWrapper>
-                      <iframe
-                        id="video"
-                        title={episodeLinks[0].title}
-                        src={currentServer}
-                        allowfullscreen="true"
-                        frameborder="0"
-                        marginwidth="0"
-                        marginheight="0"
-                        scrolling="no"
-                      ></iframe>
-                      {width <= 600 && (
-                        <div>
-                          <IconContext.Provider
-                            value={{
-                              size: "1.8rem",
-                              color: "white",
-                              style: {
-                                verticalAlign: "middle",
-                                cursor: "pointer",
-                              },
-                            }}
-                          >
-                            <BiFullscreen
-                              onClick={(e) => fullScreenHandler(e)}
-                            />
-                          </IconContext.Provider>
-                        </div>
-                      )}
-                    </IframeWrapper>
-                  </div>
-                )}
-                <EpisodeButtons>
-                  {width <= 600 && (
-                    <IconContext.Provider
-                      value={{
-                        size: "1.8rem",
-                        style: {
-                          verticalAlign: "middle",
-                        },
-                      }}
-                    >
-                      <EpisodeLinks
-                        to={
-                          "/watch" +
-                          episodeLinks[0].baseEpisodeLink +
-                          (parseInt(
-                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ) -
-                            1)
-                        }
-                        style={
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
-                            ? {
-                                pointerEvents: "none",
-                                color: "rgba(255,255,255, 0.2)",
-                              }
-                            : {}
-                        }
+                    )}
+                    {width > 600 && (
+                      <IconContext.Provider
+                        value={{
+                          size: "1.3rem",
+                          style: {
+                            verticalAlign: "middle",
+                            marginBottom: "0.2rem",
+                            marginRight: "0.3rem",
+                          },
+                        }}
                       >
-                        <HiArrowSmLeft />
-                      </EpisodeLinks>
-                    </IconContext.Provider>
-                  )}
-                  {width > 600 && (
-                    <IconContext.Provider
-                      value={{
-                        size: "1.3rem",
-                        style: {
-                          verticalAlign: "middle",
-                          marginBottom: "0.2rem",
-                          marginRight: "0.3rem",
-                        },
-                      }}
-                    >
-                      <EpisodeLinks
-                        to={
-                          "/watch" +
-                          episodeLinks[0].baseEpisodeLink +
-                          (parseInt(
-                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ) -
-                            1)
-                        }
-                        style={
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
-                            ? {
-                                pointerEvents: "none",
-                                color: "rgba(255,255,255, 0.2)",
-                              }
-                            : {}
-                        }
+                        <EpisodeLinks
+                          to={
+                            "/watch" +
+                            episodeLinks[0].baseEpisodeLink +
+                            (parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) -
+                              1)
+                          }
+                          style={
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1") === "1"
+                              ? {
+                                  pointerEvents: "none",
+                                  color: "rgba(255,255,255, 0.2)",
+                                }
+                              : {}
+                          }
+                        >
+                          <HiArrowSmLeft />
+                          Previous
+                        </EpisodeLinks>
+                      </IconContext.Provider>
+                    )}
+                    {width <= 600 && (
+                      <IconContext.Provider
+                        value={{
+                          size: "1.8rem",
+                          style: {
+                            verticalAlign: "middle",
+                          },
+                        }}
                       >
-                        <HiArrowSmLeft />
-                        Previous
-                      </EpisodeLinks>
-                    </IconContext.Provider>
-                  )}
-                  {width <= 600 && (
-                    <IconContext.Provider
-                      value={{
-                        size: "1.8rem",
-                        style: {
-                          verticalAlign: "middle",
-                        },
-                      }}
-                    >
-                      <EpisodeLinks
-                        to={
-                          "/watch" +
-                          episodeLinks[0].baseEpisodeLink +
-                          (parseInt(
+                        <EpisodeLinks
+                          to={
+                            "/watch" +
+                            episodeLinks[0].baseEpisodeLink +
+                            (parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) +
+                              1)
+                          }
+                          style={
+                            episodeLinks[0].numOfEpisodes ===
                             episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ) +
-                            1)
-                        }
-                        style={
-                          episodeLinks[0].numOfEpisodes ===
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                            ? {
-                                pointerEvents: "none",
-                                color: "rgba(255,255,255, 0.2)",
-                              }
-                            : {}
-                        }
+                              ? {
+                                  pointerEvents: "none",
+                                  color: "rgba(255,255,255, 0.2)",
+                                }
+                              : {}
+                          }
+                        >
+                          <HiArrowSmRight />
+                        </EpisodeLinks>
+                      </IconContext.Provider>
+                    )}
+                    {width > 600 && (
+                      <IconContext.Provider
+                        value={{
+                          size: "1.3rem",
+                          style: {
+                            verticalAlign: "middle",
+                            marginBottom: "0.2rem",
+                            marginLeft: "0.3rem",
+                          },
+                        }}
                       >
-                        <HiArrowSmRight />
-                      </EpisodeLinks>
-                    </IconContext.Provider>
-                  )}
-
-                  {width > 600 && (
-                    <IconContext.Provider
-                      value={{
-                        size: "1.3rem",
-                        style: {
-                          verticalAlign: "middle",
-                          marginBottom: "0.2rem",
-                          marginLeft: "0.3rem",
-                        },
-                      }}
-                    >
-                      <EpisodeLinks
-                        to={
-                          "/watch" +
-                          episodeLinks[0].baseEpisodeLink +
-                          (parseInt(
+                        <EpisodeLinks
+                          to={
+                            "/watch" +
+                            episodeLinks[0].baseEpisodeLink +
+                            (parseInt(
+                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                            ) +
+                              1)
+                          }
+                          style={
+                            episodeLinks[0].numOfEpisodes ===
                             episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                          ) +
-                            1)
-                        }
-                        style={
-                          episodeLinks[0].numOfEpisodes ===
-                          episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                            ? {
-                                pointerEvents: "none",
-                                color: "rgba(255,255,255, 0.2)",
-                              }
-                            : {}
-                        }
-                      >
-                        Next
-                        <HiArrowSmRight />
-                      </EpisodeLinks>
-                    </IconContext.Provider>
+                              ? {
+                                  pointerEvents: "none",
+                                  color: "rgba(255,255,255, 0.2)",
+                                }
+                              : {}
+                          }
+                        >
+                          Next
+                          <HiArrowSmRight />
+                        </EpisodeLinks>
+                      </IconContext.Provider>
+                    )}
+                  </EpisodeButtons>
+                  {!internalPlayer && (
+                    <ServersList
+                      episodeLinks={episodeLinks}
+                      currentServer={currentServer}
+                      setCurrentServer={setCurrentServer}
+                    />
                   )}
-                </EpisodeButtons>
-                {!internalPlayer && (
-                  <ServersList
-                    episodeLinks={episodeLinks}
-                    currentServer={currentServer}
-                    setCurrentServer={setCurrentServer}
-                  />
-                )}
+                </div>
                 <EpisodesWrapper>
                   <p>Episodes</p>
-                  {width <= 600 && (
-                    <Episodes>
-                      {episodeLinks[0].episodes.map((item, i) => (
-                        <EpisodeLink
-                          to={"/watch" + item}
-                          style={
-                            parseInt(
-                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                            ) ===
-                              i + 1 || i < localStorageDetails
-                              ? { backgroundColor: "#7676ff" }
-                              : {}
-                          }
-                        >
-                          {i + 1}
-                        </EpisodeLink>
-                      ))}
-                    </Episodes>
-                  )}
-                  {width > 600 && (
-                    <Episodes>
-                      {episodeLinks[0].episodes.map((item, i) => (
-                        <EpisodeLink
-                          to={"/watch" + item}
-                          style={
-                            parseInt(
-                              episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
-                            ) ===
-                              i + 1 || i < localStorageDetails
-                              ? { backgroundColor: "#7676ff" }
-                              : {}
-                          }
-                        >
-                          Episode {i + 1}
-                        </EpisodeLink>
-                      ))}
-                    </Episodes>
-                  )}
+                  <Episodes>
+                    {episodeLinks[0].episodes.map((item, i) => (
+                      <EpisodeLink
+                        to={"/watch" + item}
+                        style={
+                          parseInt(
+                            episodeSlug.replace(/.*?(\d+)[^\d]*$/, "$1")
+                          ) ===
+                            i + 1 || i < localStorageDetails
+                            ? { backgroundColor: "#7676ff" }
+                            : {}
+                        }
+                      >
+                        {i + 1}
+                      </EpisodeLink>
+                    ))}
+                  </Episodes>
                 </EpisodesWrapper>
-              </div>
+              </VideoPlayerWrapper>
             </div>
           )}
         </Wrapper>
@@ -442,6 +428,16 @@ function WatchAnime() {
     </div>
   );
 }
+
+const VideoPlayerWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 70% calc(30% - 1rem);
+  gap: 1rem;
+  align-items: flex-start;
+  @media screen and (max-width: 900px) {
+    grid-template-columns: auto;
+  }
+`;
 
 const Conttainer = styled.div`
   display: flex;
@@ -552,18 +548,18 @@ const EpisodesWrapper = styled.div`
     font-family: "Gilroy-Medium", sans-serif;
     margin-bottom: 1rem;
   }
-  box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81);
+  /* box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81); */
 `;
 
 const Episodes = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+  grid-gap: 0.8rem;
   grid-row-gap: 1rem;
   justify-content: space-between;
 
   @media screen and (max-width: 600px) {
-    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
   }
 `;
 
@@ -572,9 +568,9 @@ const EpisodeLink = styled(Link)`
   color: white;
   text-decoration: none;
   background-color: #242235;
-  padding: 0.9rem 2rem;
+  padding: 0.6rem 0.8rem;
   font-family: "Gilroy-Medium", sans-serif;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   border: 1px solid #393653;
   transition: 0.2s;
 

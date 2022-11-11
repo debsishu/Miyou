@@ -131,6 +131,8 @@ const Content = styled.div`
     font-size: 1.1rem;
     font-family: "Gilroy-Medium", sans-serif;
     width: 100%;
+    background-color: white;
+    color: black;
   }
   ::placeholder {
     color: #c5c5c5;

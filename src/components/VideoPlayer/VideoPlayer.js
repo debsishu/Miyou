@@ -3,11 +3,14 @@ import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { BsSkipEnd } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 
 function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
+  const { width, height } = useWindowDimensions();
+
   let src = sources.sources[0].file;
   if (src.includes("mp4")) {
     src = sources.sources_bk[0].file;
@@ -24,19 +27,32 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
 
     const defaultOptions = {
       captions: { active: true, update: true, language: "en" },
-      controls: [
-        "play-large",
-        "rewind",
-        "play",
-        "fast-forward",
-        "progress",
-        "current-time",
-        "duration",
-        "mute",
-        "volume",
-        "settings",
-        "fullscreen",
-      ],
+      controls:
+        width > 600
+          ? [
+              "play-large",
+              "rewind",
+              "play",
+              "fast-forward",
+              "progress",
+              "current-time",
+              "duration",
+              "mute",
+              "volume",
+              "settings",
+              "fullscreen",
+            ]
+          : [
+              "play-large",
+              "rewind",
+              "play",
+              "fast-forward",
+              "progress",
+              "current-time",
+              "duration",
+              "settings",
+              "fullscreen",
+            ],
     };
 
     if (Hls.isSupported()) {
