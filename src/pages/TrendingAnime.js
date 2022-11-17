@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import { TrendingAnimeQuery } from "../hooks/searchQueryStrings";
 
 function TrendingAnime() {
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -14,12 +15,26 @@ function TrendingAnime() {
 
   async function getAnime() {
     window.scrollTo(0, 0);
-    let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/trending?page=1&count=50`
-    );
+    const res = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: TrendingAnimeQuery,
+        variables: {
+          page: 1,
+          perPage: 50,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Trending Anime - Miyou"
+    document.title = "Trending Anime - Miyou";
   }
   return (
     <div>
@@ -31,14 +46,7 @@ function TrendingAnime() {
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links
-                to={
-                  "/search/" +
-                  (item.title.userPreferred !== null
-                    ? item.title.userPreferred
-                    : item.title.romaji)
-                }
-              >
+              <Links to={"/id/" + item.idMal}>
                 <img src={item.coverImage.large} alt="" />
                 <p>
                   {item.title.english !== null

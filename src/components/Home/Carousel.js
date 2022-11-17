@@ -76,7 +76,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"search/" + item.title.romaji}>
+                          <Button to={"id/" + item.idMal}>
                             <BsFillPlayFill />
                           </Button>
                         </IconContext.Provider>
@@ -92,7 +92,7 @@ function Carousel({ images }) {
                             },
                           }}
                         >
-                          <Button to={"search/" + item.title.romaji}>
+                          <Button to={"id/" + item.idMal}>
                             <BsFillPlayFill />
                             Watch Now
                           </Button>

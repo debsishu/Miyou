@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import { PopularAnimeQuery } from "../hooks/searchQueryStrings";
 
 function PopularAnime() {
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -14,12 +15,27 @@ function PopularAnime() {
 
   async function getAnime() {
     window.scrollTo(0, 0);
-    let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/popular?page=1&count=50`
-    );
+    const res = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: PopularAnimeQuery,
+        variables: {
+          page: 1,
+          perPage: 50,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setLoading(false);
+    console.log(res.data.data.Page.media);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Popular Anime - Miyou"
+    document.title = "Popular Anime - Miyou";
   }
   return (
     <div>
@@ -31,14 +47,7 @@ function PopularAnime() {
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links
-                to={
-                  "/search/" +
-                  (item.title.userPreferred !== null
-                    ? item.title.userPreferred
-                    : item.title.romaji)
-                }
-              >
+              <Links to={"/id/" + item.idMal}>
                 <img src={item.coverImage.large} alt="" />
                 <p>
                   {item.title.english !== null

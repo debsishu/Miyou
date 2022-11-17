@@ -18,10 +18,11 @@ function AnimeCards(props) {
 
   async function getData() {
     let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/${props.criteria}?page=1&count=${props.count}`
+      `${process.env.REACT_APP_BACKEND_URL}api/getmalinfo?criteria=${props.criteria}&count=${props.count}`
     );
+
     setLoading(false);
-    setData(res.data.data.Page.media);
+    setData(res.data.data);
   }
   return (
     <div>
@@ -61,21 +62,10 @@ function AnimeCards(props) {
           {data.map((item, i) => (
             <SwiperSlide>
               <Wrapper>
-                <Link
-                  to={
-                    "search/" +
-                    (item.title.userPreferred !== null
-                      ? item.title.userPreferred
-                      : item.title.romaji)
-                  }
-                >
-                  <img src={item.coverImage.large} alt="" />
+                <Link to={"id/" + item.node.id}>
+                  <img src={item.node.main_picture.large} alt="" />
                 </Link>
-                <p>
-                  {item.title.english !== null
-                    ? item.title.english
-                    : item.title.romaji}
-                </p>
+                <p>{item.node.title}</p>
               </Wrapper>
             </SwiperSlide>
           ))}

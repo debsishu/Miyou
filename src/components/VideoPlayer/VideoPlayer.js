@@ -8,13 +8,16 @@ import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 
-function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
-  const { width, height } = useWindowDimensions();
+function VideoPlayer({
+  sources,
+  internalPlayer,
+  setInternalPlayer,
+  title,
+  type,
+}) {
+  const { width } = useWindowDimensions();
 
-  let src = sources.sources[0].file;
-  if (src.includes("mp4")) {
-    src = sources.sources_bk[0].file;
-  }
+  let src = sources;
   const [player, setPlayer] = useState(null);
 
   function skipIntro() {
@@ -55,6 +58,20 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
             ],
     };
 
+    if (type === "mp4") {
+      video.removeAttribute("crossorigin");
+      const player = new plyr(video, defaultOptions);
+      player.source = {
+        type: "video",
+        title: "Example title",
+        sources: [
+          {
+            src: src,
+            type: "video/mp4",
+          },
+        ],
+      };
+    }
     if (Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(src);
@@ -209,7 +226,7 @@ function VideoPlayer({ sources, internalPlayer, setInternalPlayer, title }) {
         localStorage.setItem(title, Math.round(player.currentTime));
       });
     } else {
-      const player = new plyr(src, defaultOptions);
+      const player = new plyr(video, defaultOptions);
       player.source = {
         type: "video",
         title: "Example title",

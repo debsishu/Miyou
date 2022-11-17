@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import { top100AnimeQuery } from "../hooks/searchQueryStrings";
 
 function Top100Anime() {
   const [animeDetails, setAnimeDetails] = useState([]);
@@ -14,12 +15,26 @@ function Top100Anime() {
 
   async function getAnime() {
     window.scrollTo(0, 0);
-    let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/top100?page=1&count=50`
-    );
+    const res = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: top100AnimeQuery,
+        variables: {
+          page: 1,
+          perPage: 50,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setLoading(false);
     setAnimeDetails(res.data.data.Page.media);
-    document.title = "Top 100 Anime - Miyou"
+    document.title = "Top 100 Anime - Miyou";
   }
   return (
     <div>
@@ -31,14 +46,7 @@ function Top100Anime() {
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links
-                to={
-                  "/search/" +
-                  (item.title.userPreferred !== null
-                    ? item.title.userPreferred
-                    : item.title.romaji)
-                }
-              >
+              <Links to={"/id/" + item.idMal}>
                 <img src={item.coverImage.large} alt="" />
                 <p>
                   {item.title.english !== null

@@ -7,90 +7,67 @@ import { Scrollbar } from "swiper";
 import AnimeCardsSkeleton from "../skeletons/AnimeCardsSkeleton";
 import { IoClose } from "react-icons/io5";
 import { IconContext } from "react-icons";
+import { searchWatchedId } from "../../hooks/searchQueryStrings";
 
 import "swiper/css";
 import "swiper/css/scrollbar";
 
-const anilistUrl = "https://graphql.anilist.co";
-let searchAnimeQuery = `
-	query($search: String) {
-		Media (search : $search, type: ANIME, sort:POPULARITY_DESC) {
-			title {
-				romaji
-				english
-				userPreferred
-			}
-			bannerImage
-			coverImage{
-				extraLarge
-				large
-			}
-		}
-	}
-`;
-
 function WatchingEpisodes() {
   const [data, setData] = useState([]);
+  const [localData, setLocalData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(false);
 
   useEffect(() => {
-    getData();
-  }, [change]);
+    getAnimeData();
+  }, []);
 
-  async function getData() {
+  async function getAnimeData() {
     setLoading(true);
-    let lsData = localStorage.getItem("Animes");
-    lsData = JSON.parse(lsData);
-    let apiRes = [];
-
-    for (let i = 0; i < lsData.Names.length; i++) {
-      let name = lsData.Names[i].name;
-      let anilistResponse;
-      try {
-        anilistResponse = await axios({
-          url: anilistUrl,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          data: {
-            query: searchAnimeQuery,
-            variables: {
-              search: name.replace(" (Dub)", "").replace(" (TV)", ""),
-            },
-          },
-        });
-      } catch (err) {
-        console.log("Error from getanime anilist api call", err);
-        apiRes.push({
-          name,
-          coverImage: "https://i.ibb.co/RYhg4tH/banner-not-found.jpg",
-          link: lsData.Names[i].episodeLink,
-          episodeNum: lsData.Names[i].currentEpisode,
-          index: i,
-        });
-        continue;
-      }
-      apiRes.push({
-        name,
-        coverImage: anilistResponse.data.data.Media.coverImage.extraLarge,
-        link: lsData.Names[i].episodeLink,
-        episodeNum: lsData.Names[i].currentEpisode,
-        index: i,
-      });
+    let data = localStorage.getItem("Watching");
+    data = JSON.parse(data);
+    setLocalData(data);
+    let ids = [];
+    for (let i = 0; i < data.length; i++) {
+      ids.push(data[i].malId);
     }
-    setData(apiRes);
+    let result = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: searchWatchedId,
+        variables: {
+          ids,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
+    let output = [];
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < result.data.data.Page.media.length; j++) {
+        if (
+          parseInt(result.data.data.Page.media[j].idMal) ===
+          parseInt(data[i].malId)
+        ) {
+          output.push(result.data.data.Page.media[j]);
+        }
+      }
+    }
+    setData(output);
     setLoading(false);
   }
 
   function removeAnime(index) {
-    let lsData = localStorage.getItem("Animes");
+    let lsData = localStorage.getItem("Watching");
     lsData = JSON.parse(lsData);
-    lsData.Names.splice(index, 1);
+    lsData.splice(index, 1);
     lsData = JSON.stringify(lsData);
-    localStorage.setItem("Animes", lsData);
+    localStorage.setItem("Watching", lsData);
     data.splice(index, 1);
     setChange(!change);
   }
@@ -152,12 +129,17 @@ function WatchingEpisodes() {
                   </button>
                 </IconContext.Provider>
 
-                <Link to={"watch/" + item.link}>
-                  <img src={item.coverImage} alt="" />
+                <Link
+                  to={`play/${localData[i].animeId}/${localData[i].episode}`}
+                >
+                  <img src={item.coverImage.extraLarge} alt="" />
                 </Link>
-                <p>{item.name}</p>
+                <p>
+                  {item.title.userPreferred}
+                  {localData[i].isDub ? " (Dub)" : " (Sub)"}
+                </p>
                 <p className="episodeNumber">
-                  {"Episode - " + item.episodeNum}
+                  {"Episode - " + localData[i].episode}
                 </p>
               </Wrapper>
             </SwiperSlide>

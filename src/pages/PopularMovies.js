@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
-import { favouritesAnimeQuery } from "../hooks/searchQueryStrings";
 
-function FavouriteAnime() {
+function PopularMovies() {
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,44 +14,29 @@ function FavouriteAnime() {
 
   async function getAnime() {
     window.scrollTo(0, 0);
-    const res = await axios({
-      url: process.env.REACT_APP_BASE_URL,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      data: {
-        query: favouritesAnimeQuery,
-        variables: {
-          page: 1,
-          perPage: 50,
-        },
-      },
-    }).catch((err) => {
-      console.log(err);
-    });
+    let res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}api/getmalinfo?criteria=movie&count=100`
+    );
+
     setLoading(false);
-    setAnimeDetails(res.data.data.Page.media);
-    document.title = "Favorite Anime - Miyou";
+    console.log(res.data.data);
+    setAnimeDetails(res.data.data);
+    document.title = "Popular Anime - Miyou";
   }
+
   return (
     <div>
-      {loading && <SearchResultsSkeleton name="Favourite Anime" />}
+      {loading && <SearchResultsSkeleton name="Popular Movie" />}
       {!loading && (
         <Parent>
           <Heading>
-            <span>Favourite Anime</span> Results
+            <span>Popular Movie</span> Results
           </Heading>
           <CardWrapper>
             {animeDetails.map((item, i) => (
-              <Links to={"/id/" + item.idMal}>
-                <img src={item.coverImage.large} alt="" />
-                <p>
-                  {item.title.english !== null
-                    ? item.title.english
-                    : item.title.userPreferred}
-                </p>
+              <Links to={"/id/" + item.node.id}>
+                <img src={item.node.main_picture.large} alt="" />
+                <p>{item.node.title}</p>
               </Links>
             ))}
           </CardWrapper>
@@ -61,7 +45,6 @@ function FavouriteAnime() {
     </div>
   );
 }
-
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;
   @media screen and (max-width: 600px) {
@@ -144,5 +127,4 @@ const Heading = styled.p`
     margin-bottom: 1rem;
   }
 `;
-
-export default FavouriteAnime;
+export default PopularMovies;

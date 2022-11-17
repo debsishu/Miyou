@@ -7,6 +7,7 @@ import AnimeCards from "../components/Home/AnimeCards";
 import HomeSkeleton from "../components/skeletons/CarouselSkeleton";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import WatchingEpisodes from "../components/Home/WatchingEpisodes";
+import { TrendingAnimeQuery } from "../hooks/searchQueryStrings";
 
 function Home() {
   const [images, setImages] = useState([]);
@@ -19,18 +20,32 @@ function Home() {
 
   async function getImages() {
     window.scrollTo(0, 0);
-    let result = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/trending?page=1&count=15`
-    );
+    let result = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: TrendingAnimeQuery,
+        variables: {
+          page: 1,
+          perPage: 15,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setImages(result.data.data.Page.media);
     setLoading(false);
-    document.title = "Miyou - Watch Anime Free Online With English Sub and Dub"
+    document.title = "Miyou - Watch Anime Free Online With English Sub and Dub";
   }
 
   function checkSize() {
-    let lsData = localStorage.getItem("Animes");
+    let lsData = localStorage.getItem("Watching");
     lsData = JSON.parse(lsData);
-    if (lsData.Names.length === 0) {
+    if (lsData.length === 0) {
       return false;
     }
     return true;
@@ -43,7 +58,7 @@ function Home() {
         </HomeHeading>
         {loading && <HomeSkeleton />}
         {!loading && <Carousel images={images} />}
-        {localStorage.getItem("Animes") && checkSize() && (
+        {localStorage.getItem("Watching") && checkSize() && (
           <div>
             <HeadingWrapper>
               <Heading>
@@ -56,20 +71,20 @@ function Home() {
         <div>
           <HeadingWrapper>
             <Heading>
-              <span>All Time</span> Popular
-            </Heading>
-            <Links to="/popular">View All</Links>
-          </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="popular" />
-        </div>
-        <div>
-          <HeadingWrapper>
-            <Heading>
               <span>Trending</span> Now
             </Heading>
             <Links to="/trending">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="trending" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="airing" />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>All Time</span> Popular
+            </Heading>
+            <Links to="/popular">View All</Links>
+          </HeadingWrapper>
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="bypopularity" />
         </div>
         <div>
           <HeadingWrapper>
@@ -78,7 +93,7 @@ function Home() {
             </Heading>
             <Links to="/top100">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="top100" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="all" />
         </div>
         <div>
           <HeadingWrapper>
@@ -87,7 +102,16 @@ function Home() {
             </Heading>
             <Links to="/favourites">View All</Links>
           </HeadingWrapper>
-          <AnimeCards count={width <= 600 ? 7 : 15} criteria="favourite" />
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="favorite" />
+        </div>
+        <div>
+          <HeadingWrapper>
+            <Heading>
+              <span>Popular</span> Movies
+            </Heading>
+            <Links to="/movies">View All</Links>
+          </HeadingWrapper>
+          <AnimeCards count={width <= 600 ? 7 : 15} criteria="movie" />
         </div>
       </HomeDiv>
     </div>

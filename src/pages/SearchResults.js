@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
+import { searchAnimeQuery } from "../hooks/searchQueryStrings";
 
 function SearchResults() {
   let urlParams = useParams().name;
-  urlParams = urlParams.replace(":", "").replace("(", "").replace(")", "");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,12 +17,25 @@ function SearchResults() {
   async function getResults() {
     setLoading(true);
     window.scrollTo(0, 0);
-    let res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}api/search?name=${urlParams}`
-    );
+    let res = await axios({
+      url: process.env.REACT_APP_BASE_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        query: searchAnimeQuery,
+        variables: {
+          search: urlParams,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
     setLoading(false);
-    setResults(res.data);
-    document.title = urlParams + " - Miyou"
+    setResults(res.data.data.Page.media);
+    document.title = urlParams + " - Miyou";
   }
   return (
     <div>
@@ -34,9 +47,9 @@ function SearchResults() {
           </Heading>
           <CardWrapper>
             {results.map((item, i) => (
-              <Wrapper to={item.link}>
-                <img src={item.image} alt="" />
-                <p>{item.title}</p>
+              <Wrapper to={`/id/${item.idMal}`}>
+                <img src={item.coverImage.extraLarge} alt="" />
+                <p>{item.title.userPreferred}</p>
               </Wrapper>
             ))}
           </CardWrapper>
@@ -58,17 +71,6 @@ const Parent = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  /* display: flex;
-  justify-content: space-between;
-  flex-flow: row wrap;
-  row-gap: 2rem;
-  column-gap: 2rem;
-
-  ::after {
-    content: "";
-    flex: auto;
-  } */
-
   display: grid;
   grid-template-columns: repeat(auto-fill, 160px);
   grid-gap: 1rem;

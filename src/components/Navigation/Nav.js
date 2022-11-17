@@ -20,7 +20,7 @@ function Nav() {
           <Links to="/trending">Trending</Links>
           <Links to="/popular">Popular</Links>
           <Links to="/favourites">Favourites</Links>
-          <Links to="/top100">Top 100 Anime</Links>
+          <Links to="/movies">Top Movies</Links>
         </div>
 
         {width <= 600 && (
