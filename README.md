@@ -1,6 +1,7 @@
 # Welcome to Miyou Github Repository
 
-![Miyou Mockup Photo Here](https://i.ibb.co/0fQmS4F/Miyou-Mockup.jpg)
+![Miyou Mockup Photo Here](https://user-images.githubusercontent.com/61660793/202531185-92331444-9216-4dd2-8616-2772a9d65f1d.jpg)
+
 
 ## Miyou is an online anime streaming site built using React.js
 
