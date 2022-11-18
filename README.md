@@ -11,8 +11,8 @@
 
 ### Set up your .env file
 
-First add a .env file in your root directory. Then add
-`REACT_APP_BACKEND_URL='https://miyou-api.up.railway.app/'`
+First add a .env file in your root directory. Then add <br />
+`REACT_APP_BACKEND_URL='https://miyou-api.cyclic.app/'` <br />
 `REACT_APP_BASE_URL='https://graphql.anilist.co'`
 
 ## Disclaimer :
