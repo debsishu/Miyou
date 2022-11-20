@@ -1,4 +1,4 @@
-![Miyou-Banner](https://user-images.githubusercontent.com/61660793/202897934-8656a581-a55a-47d7-9658-ee9e4f2295dc.png)
+![Miyou Banner](https://user-images.githubusercontent.com/61660793/202897934-8656a581-a55a-47d7-9658-ee9e4f2295dc.png)
 
 # Welcome to Miyou Github Repository
 
