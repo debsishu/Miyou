@@ -1,3 +1,5 @@
+![Miyou-Banner](https://user-images.githubusercontent.com/61660793/202897934-8656a581-a55a-47d7-9658-ee9e4f2295dc.png)
+
 # Welcome to Miyou Github Repository
 
 ![Miyou Mockup Photo Here](https://user-images.githubusercontent.com/61660793/202531185-92331444-9216-4dd2-8616-2772a9d65f1d.jpg)
