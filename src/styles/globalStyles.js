@@ -72,6 +72,14 @@ const GlobalStyle = createGlobalStyle`
 		background-color: rgba(0, 0, 0, 0.6);
 		color: white;
 	}
+
+	.plyr__poster {
+		background-size: cover;
+	}
+
+	.plyr {
+    aspect-ratio: 16 / 9;
+	}
 `;
 
 export default GlobalStyle;

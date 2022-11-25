@@ -121,9 +121,11 @@ function WatchAnimeV2() {
               <div>
                 <Titles>
                   <p>
-                    <span>{`${animeDetails.title.userPreferred} ${
-                      episodeLinks.isDub ? "(Dub)" : "(Sub)"
-                    }`}</span>
+                    <span>{`${
+                      animeDetails.title.english !== null
+                        ? animeDetails.title.english
+                        : animeDetails.title.userPreferred
+                    } ${episodeLinks.isDub ? "(Dub)" : "(Sub)"}`}</span>
                     {` Episode - ${episode}`}
                   </p>
                   {width <= 600 && (
@@ -169,7 +171,7 @@ function WatchAnimeV2() {
                 <p
                   style={{
                     fontSize: "0.9rem",
-                    color: "#bebae6",
+                    color: "#b5c3de",
                   }}
                 >
                   If the video player doesn't load or if blank refresh the page
@@ -186,6 +188,7 @@ function WatchAnimeV2() {
                       internalPlayer={internalPlayer}
                       setInternalPlayer={setInternalPlayer}
                       title={`${episodeLinks.mal_id}EP${episodeLinks.episodeNum}${episodeLinks.isDub}`}
+                      banner={animeDetails.bannerImage}
                     />
                   )}
                   {!internalPlayer && (

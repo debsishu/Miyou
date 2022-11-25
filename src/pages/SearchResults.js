@@ -49,7 +49,11 @@ function SearchResults() {
             {results.map((item, i) => (
               <Wrapper to={`/id/${item.idMal}`}>
                 <img src={item.coverImage.extraLarge} alt="" />
-                <p>{item.title.userPreferred}</p>
+                <p>
+                  {item.title.english !== null
+                    ? item.title.english
+                    : item.title.userPreferred}
+                </p>
               </Wrapper>
             ))}
           </CardWrapper>

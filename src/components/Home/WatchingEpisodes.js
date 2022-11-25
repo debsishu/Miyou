@@ -135,7 +135,9 @@ function WatchingEpisodes() {
                   <img src={item.coverImage.extraLarge} alt="" />
                 </Link>
                 <p>
-                  {item.title.userPreferred}
+                  {item.title.english !== null
+                    ? item.title.english
+                    : item.title.userPreferred}
                   {localData[i].isDub ? " (Dub)" : " (Sub)"}
                 </p>
                 <p className="episodeNumber">

@@ -14,6 +14,7 @@ function VideoPlayer({
   setInternalPlayer,
   title,
   type,
+  banner,
 }) {
   const { width } = useWindowDimensions();
 
@@ -64,6 +65,7 @@ function VideoPlayer({
       player.source = {
         type: "video",
         title: "Example title",
+        poster: banner,
         sources: [
           {
             src: src,
@@ -275,7 +277,15 @@ function VideoPlayer({
           </div>
         </IconContext.Provider>
       </Conttainer>
-      <video id="player" playsInline crossorigin="anonymous"></video>
+      <video
+        id="player"
+        playsInline
+        crossorigin
+        data-poster={banner}
+        style={{
+          aspectRatio: 16 / 9,
+        }}
+      ></video>
     </div>
   );
 }

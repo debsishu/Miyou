@@ -239,7 +239,8 @@ const NotAvailable = styled.div`
 
   h1 {
     margin-top: -2rem;
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: normal;
+    font-family: "Gilroy-Medium", sans-serif;
   }
 
   @media screen and (max-width: 600px) {
