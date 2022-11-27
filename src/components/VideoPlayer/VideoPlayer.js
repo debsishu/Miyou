@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { BsSkipEnd } from "react-icons/bs";
+import { MdPlayDisabled, MdPlayArrow } from "react-icons/md";
 import { IconContext } from "react-icons";
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { useNavigate, useParams } from "react-router-dom";
 import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
@@ -15,17 +17,33 @@ function VideoPlayer({
   title,
   type,
   banner,
+  totalEpisodes,
+  currentEpisode,
 }) {
   const { width } = useWindowDimensions();
+  const navigate = useNavigate();
+  const slug = useParams().slug;
+  const episode = useParams().episode;
 
   let src = sources;
   const [player, setPlayer] = useState(null);
+  const [autoPlay, setAutoplay] = useState(false);
 
   function skipIntro() {
     player.forward(85);
   }
 
+  function updateAutoplay(data) {
+    localStorage.setItem("autoplay", data);
+    setAutoplay(data);
+  }
+
   useEffect(() => {
+    if (!localStorage.getItem("autoplay")) {
+      localStorage.setItem("autoplay", false);
+    } else {
+      setAutoplay(localStorage.getItem("autoplay") === "true");
+    }
     const video = document.getElementById("player");
     let flag = true;
 
@@ -127,8 +145,18 @@ function VideoPlayer({
           if (time > lastTime) {
             localStorage.setItem(title, Math.round(player.currentTime));
           }
-          if (player.ended) {
-            localStorage.removeItem(title);
+        });
+
+        player.on("ended", function () {
+          localStorage.removeItem(title);
+          console.log(currentEpisode + " _ " + totalEpisodes);
+          console.log(episode + " _ " + slug);
+
+          if (
+            localStorage.getItem("autoplay") === "true" &&
+            parseInt(currentEpisode) !== parseInt(totalEpisodes)
+          ) {
+            navigate(`/play/${slug}/${parseInt(episode) + 1}`);
           }
         });
 
@@ -262,6 +290,22 @@ function VideoPlayer({
         >
           {internalPlayer && <p>Internal Player</p>}
           <div>
+            {autoPlay && (
+              <div className="tooltip">
+                <button onClick={() => updateAutoplay(false)}>
+                  <MdPlayArrow />
+                </button>
+                <span className="tooltiptext">Disable Autoplay</span>
+              </div>
+            )}
+            {!autoPlay && (
+              <div className="tooltip">
+                <button onClick={() => updateAutoplay(true)}>
+                  <MdPlayDisabled />
+                </button>
+                <span className="tooltiptext">Enable Autoplay</span>
+              </div>
+            )}
             <div className="tooltip">
               <button onClick={() => setInternalPlayer(!internalPlayer)}>
                 <HiOutlineSwitchHorizontal />

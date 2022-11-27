@@ -189,6 +189,8 @@ function WatchAnimeV2() {
                       setInternalPlayer={setInternalPlayer}
                       title={`${episodeLinks.mal_id}EP${episodeLinks.episodeNum}${episodeLinks.isDub}`}
                       banner={animeDetails.bannerImage}
+                      totalEpisodes={episodeLinks.totalEpisodes}
+                      currentEpisode={episodeLinks.episodeNum}
                     />
                   )}
                   {!internalPlayer && (

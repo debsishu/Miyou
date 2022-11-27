@@ -66,6 +66,7 @@ function WatchingEpisodes() {
     let lsData = localStorage.getItem("Watching");
     lsData = JSON.parse(lsData);
     lsData.splice(index, 1);
+    setLocalData(lsData);
     lsData = JSON.stringify(lsData);
     localStorage.setItem("Watching", lsData);
     data.splice(index, 1);
