@@ -162,7 +162,7 @@ const Content = styled.div`
   margin: 6rem 2.3rem 0 2.3rem;
 
   p {
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 600;
     font-size: 1.6rem;
   }
   @media screen and (max-width: 600px) {
@@ -177,7 +177,7 @@ const Content = styled.div`
 
 const Button = styled(Link)`
   color: white;
-  font-family: "Gilroy-Bold", sans-serif;
+  font-weight: 500;
   text-decoration: none;
   background-color: #7676ff;
   outline: none;

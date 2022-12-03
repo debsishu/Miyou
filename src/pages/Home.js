@@ -139,10 +139,10 @@ const HomeDiv = styled.div`
 const HomeHeading = styled.p`
   font-size: 2.3rem;
   color: white;
-  font-family: "Gilroy-Light", sans-serif;
+  font-weight: 200;
 
   span {
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 600;
   }
   margin-bottom: 1rem;
 
@@ -154,10 +154,10 @@ const HomeHeading = styled.p`
 const Heading = styled.p`
   font-size: 1.8rem;
   color: white;
-  font-family: "Gilroy-Light", sans-serif;
-
+  font-weight: 200;
+  margin-top: 1rem;
   span {
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 600;
   }
 
   @media screen and (max-width: 600px) {

@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
 	}
 	body {
 		background-color: #1A1927;
-		font-family: 'Gilroy-Regular', sans-serif;
+		font-family: 'Lexend', sans-serif;
 	}
 
 	:root {

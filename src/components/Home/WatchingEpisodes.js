@@ -184,7 +184,7 @@ const Wrapper = styled.div`
   p {
     color: white;
     font-size: 1rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     @media screen and (max-width: 600px) {
       max-width: 120px;
     }
@@ -194,7 +194,8 @@ const Wrapper = styled.div`
   }
 
   .episodeNumber {
-    font-family: "Gilroy-Regular", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
     color: #b5c3de;
   }
 `;

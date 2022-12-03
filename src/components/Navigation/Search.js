@@ -128,8 +128,9 @@ const Content = styled.div`
     outline: none;
     border: none;
     padding: 1rem 2rem 1rem 0.5rem;
-    font-size: 1.1rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-size: 1rem;
+    font-family: "Lexend", sans-serif;
+    font-weight: 400;
     width: 100%;
     background-color: white;
     color: black;
@@ -168,7 +169,8 @@ const Content = styled.div`
     text-decoration: none;
     border-radius: 0.3rem;
     text-align: center;
-    font-family: "Gilroy-Bold", sans-serif;
+    font-family: "Lexend", sans-serif;
+    font-weight: 500;
     cursor: pointer;
 
     @media screen and (max-width: 600px) {
@@ -198,7 +200,7 @@ const SearchButton = styled(Link)`
   text-decoration: none;
   border-radius: 0.3rem;
   text-align: center;
-  font-family: "Gilroy-Bold", sans-serif;
+  font-weight: 500;
 
   @media screen and (max-width: 600px) {
     display: block;

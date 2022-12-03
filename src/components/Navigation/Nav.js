@@ -75,7 +75,8 @@ const Shadow = styled.div`
 
 const Button = styled.button`
   color: white;
-  font-family: "Gilroy-Bold", sans-serif;
+  font-family: 'Lexend', sans-serif;
+  font-weight: 500;
   background-color: #7676ff;
   outline: none;
   border: none;
@@ -96,7 +97,7 @@ const Button = styled.button`
 
 const Links = styled(Link)`
   color: white;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 400;
   text-decoration: none;
   margin: 0rem 1.3rem 0 1.3rem;
 `;

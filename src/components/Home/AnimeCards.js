@@ -95,7 +95,7 @@ const Wrapper = styled.div`
   p {
     color: white;
     font-size: 1rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
   }
 `;
 

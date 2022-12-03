@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Nav from "./components/Navigation/Nav";
 import AnimeDetails from "./pages/AnimeDetails";
 import FavouriteAnime from "./pages/FavouriteAnime";
@@ -31,6 +32,16 @@ function App() {
         <Route path="/id/:id" element={<MalAnimeDetails />} />
         <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
       </Routes>
+      <Toaster
+        toastOptions={{
+          style: {
+            borderRadius: "10px",
+            background: "#242235",
+            border: "1px solid #393653",
+            color: "#fff",
+          },
+        }}
+      />
     </Router>
   );
 }

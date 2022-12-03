@@ -240,7 +240,7 @@ const NotAvailable = styled.div`
   h1 {
     margin-top: -2rem;
     font-weight: normal;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 600;
   }
 
   @media screen and (max-width: 600px) {
@@ -266,13 +266,15 @@ const DubContainer = styled.div`
     label {
       display: flex;
       align-items: center;
-      font-family: sans-serif;
+      font-family: "Lexend", sans-serif;
+      font-weight: 400;
       cursor: pointer;
+      margin-bottom: 0.3rem;
     }
 
     .label {
-      margin-bottom: 0.5rem;
-      font-family: "Gilroy-Medium", sans-serif;
+      margin-bottom: 0.7rem;
+      font-weight: 500;
     }
 
     .indicator {
@@ -325,8 +327,8 @@ const Episode = styled.div`
   color: white;
 
   h2 {
-    font-size: 1.4rem;
-    text-decoration: underline;
+    font-size: 1.2rem;
+    font-weight: 500;
     margin-bottom: 1rem;
   }
   box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81);
@@ -355,7 +357,7 @@ const EpisodeLink = styled(Link)`
   text-decoration: none;
   background-color: #242235;
   padding: 0.9rem 2rem;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 500;
   border-radius: 0.5rem;
   border: 1px solid #393653;
   transition: 0.2s;
@@ -367,7 +369,7 @@ const EpisodeLink = styled(Link)`
   @media screen and (max-width: 600px) {
     padding: 1rem;
     border-radius: 0.3rem;
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 500;
   }
 `;
 
@@ -392,18 +394,20 @@ const ContentWrapper = styled.div`
     margin: 1rem;
     font-size: 1rem;
     color: #b5c3de;
-    font-family: "Gilroy-Regular", sans-serif;
     span {
-      font-family: "Gilroy-Bold", sans-serif;
+      font-weight: 700;
       color: white;
     }
     p {
+      font-weight: 300;
       text-align: justify;
     }
     h1 {
-      font-family: "Gilroy-Bold", sans-serif;
-      font-weight: normal;
+      font-weight: 700;
       color: white;
+    }
+    h3 {
+      font-weight: 500;
     }
     button {
       display: none;
@@ -429,7 +433,7 @@ const ContentWrapper = styled.div`
         outline: none;
         background-color: transparent;
         text-decoration: underline;
-        font-family: "Gilroy-Bold", sans-serif;
+        font-weight: 700;
         font-size: 1rem;
         color: white;
       }
@@ -444,7 +448,7 @@ const Poster = styled.div`
     width: 220px;
     height: 300px;
     border-radius: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.3rem;
     position: relative;
     top: -20%;
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
@@ -462,13 +466,13 @@ const Poster = styled.div`
 `;
 
 const Button = styled(Link)`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   padding: 1rem 3.4rem;
   text-align: center;
   text-decoration: none;
   color: white;
   background-color: #7676ff;
-  font-family: "Gilroy-Bold", sans-serif;
+  font-weight: 700;
   border-radius: 0.4rem;
   position: relative;
   top: -25%;

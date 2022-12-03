@@ -121,7 +121,7 @@ const Links = styled(Link)`
   p {
     color: white;
     font-size: 1rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     text-decoration: none;
     max-width: 160px;
     @media screen and (max-width: 380px) {
@@ -134,10 +134,10 @@ const Links = styled(Link)`
 const Heading = styled.p`
   font-size: 1.8rem;
   color: white;
-  font-family: "Gilroy-Light", sans-serif;
+  font-weight: 200;
   margin-bottom: 2rem;
   span {
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 600;
   }
 
   @media screen and (max-width: 600px) {

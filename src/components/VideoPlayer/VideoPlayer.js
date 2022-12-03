@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
+import toast from "react-hot-toast";
 
 function VideoPlayer({
   sources,
@@ -34,6 +35,9 @@ function VideoPlayer({
   }
 
   function updateAutoplay(data) {
+    toast.success(`Autoplay ${data ? "Enabled" : "Disabled"}`, {
+      position: "top-center",
+    });
     localStorage.setItem("autoplay", data);
     setAutoplay(data);
   }
@@ -274,7 +278,6 @@ function VideoPlayer({
     <div
       style={{
         marginBottom: "1rem",
-        fontFamily: '"Gilroy-Medium", sans-serif',
         "--plyr-color-main": "#7676FF",
       }}
     >
@@ -292,31 +295,41 @@ function VideoPlayer({
           <div>
             {autoPlay && (
               <div className="tooltip">
-                <button onClick={() => updateAutoplay(false)}>
+                <button
+                  title="Disable Autoplay"
+                  onClick={() => updateAutoplay(false)}
+                >
                   <MdPlayArrow />
                 </button>
-                <span className="tooltiptext">Disable Autoplay</span>
               </div>
             )}
             {!autoPlay && (
               <div className="tooltip">
-                <button onClick={() => updateAutoplay(true)}>
+                <button
+                  title="Enable Autoplay"
+                  onClick={() => updateAutoplay(true)}
+                >
                   <MdPlayDisabled />
                 </button>
-                <span className="tooltiptext">Enable Autoplay</span>
               </div>
             )}
             <div className="tooltip">
-              <button onClick={() => setInternalPlayer(!internalPlayer)}>
+              <button
+                title="Change Server"
+                onClick={() => {
+                  toast.success("Swtitched to External Player", {
+                    position: "top-center",
+                  });
+                  setInternalPlayer(!internalPlayer);
+                }}
+              >
                 <HiOutlineSwitchHorizontal />
               </button>
-              <span className="tooltiptext">Change Server</span>
             </div>
             <div className="tooltip">
-              <button onClick={() => skipIntro()}>
+              <button title="Skip Intro" onClick={() => skipIntro()}>
                 <BsSkipEnd />
               </button>
-              <span className="tooltiptext">Skip Intro</span>
             </div>
           </div>
         </IconContext.Provider>
@@ -344,7 +357,7 @@ const Conttainer = styled.div`
   border: 1px solid #393653;
   margin-top: 1rem;
   border-bottom: none;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 400;
   p {
     color: white;
   }

@@ -449,7 +449,7 @@ const Conttainer = styled.div`
   border: 1px solid #393653;
   border-bottom: none;
   margin-top: 1rem;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 400;
   p {
     color: white;
   }
@@ -545,7 +545,7 @@ const EpisodesWrapper = styled.div`
     font-size: 1.3rem;
     text-decoration: underline;
     color: white;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     margin-bottom: 1rem;
   }
   /* box-shadow: 0px 4.41109px 20.291px rgba(16, 16, 24, 0.81); */
@@ -569,7 +569,7 @@ const EpisodeLink = styled(Link)`
   text-decoration: none;
   background-color: #242235;
   padding: 0.6rem 0.8rem;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 400;
   border-radius: 0.3rem;
   border: 1px solid #393653;
   transition: 0.2s;
@@ -583,7 +583,7 @@ const ServerWrapper = styled.div`
   p {
     color: white;
     font-size: 1.4rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     text-decoration: underline;
   }
 
@@ -612,7 +612,7 @@ const ServerWrapper = styled.div`
     border: 1px solid #393653;
     padding: 0.7rem 1.5rem;
     border-radius: 0.4rem;
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     font-size: 0.9rem;
   }
 
@@ -643,7 +643,7 @@ const EpisodeLinks = styled(Link)`
   background-color: #242235;
   border: 1px solid #393653;
   text-decoration: none;
-  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: 400;
   border-radius: 0.4rem;
 
   @media screen and (max-width: 600px) {
@@ -660,15 +660,15 @@ const Titles = styled.div`
   margin-bottom: 0.5rem;
   p {
     font-size: 1.7rem;
-    font-family: "Gilroy-Light", sans-serif;
+    font-weight: 200;
   }
 
   span {
-    font-family: "Gilroy-Bold", sans-serif;
+    font-weight: 600;
   }
 
   a {
-    font-family: "Gilroy-Medium", sans-serif;
+    font-weight: 400;
     background-color: #242235;
     border: 1px solid #393653;
     text-decoration: none;
