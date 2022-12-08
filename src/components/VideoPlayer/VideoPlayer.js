@@ -10,6 +10,7 @@ import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 import toast from "react-hot-toast";
+import { click } from "@testing-library/user-event/dist/click";
 
 function VideoPlayer({
   sources,
@@ -131,6 +132,31 @@ function VideoPlayer({
         });
         player.on("ready", () => {
           plyer = document.querySelector(".plyr__controls");
+          document
+            .querySelector(".plyr__video-wrapper")
+            .addEventListener("click", () => {
+              let regexp = /android|iphone|kindle|ipad/i;
+              if (regexp.test(navigator.userAgent)) {
+                player.togglePlay();
+              }
+            });
+
+          var tapedTwice = false;
+          function tapHandler(event) {
+            if (!tapedTwice) {
+              tapedTwice = true;
+              setTimeout(function () {
+                tapedTwice = false;
+              }, 300);
+              return false;
+            }
+            event.preventDefault();
+            //action on double tap goes below
+            player.fullscreen.toggle();
+          }
+          document
+            .querySelector(".plyr__video-wrapper")
+            .addEventListener("touchstart", tapHandler);
         });
 
         player.on("enterfullscreen", (event) => {
