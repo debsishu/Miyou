@@ -136,7 +136,10 @@ function VideoPlayer({
             .querySelector(".plyr__video-wrapper")
             .addEventListener("click", () => {
               let regexp = /android|iphone|kindle|ipad/i;
-              if (regexp.test(navigator.userAgent)) {
+              if (
+                regexp.test(navigator.userAgent) &&
+                getComputedStyle(player.elements.controls).opacity === "1"
+              ) {
                 player.togglePlay();
               }
             });
