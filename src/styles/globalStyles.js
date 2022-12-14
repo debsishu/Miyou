@@ -50,6 +50,14 @@ const GlobalStyle = createGlobalStyle`
 		}
 	}
 
+	.swiper-scrollbar {
+		background-color: #28273A;
+	}
+
+	.swiper-scrollbar-drag {
+		background-color: #3D3B5B;
+	}
+
 	.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
     bottom: 0px !important;
 	}

@@ -73,7 +73,7 @@ function Home() {
             <Heading>
               <span>Trending</span> Now
             </Heading>
-            <Links to="/trending">View All</Links>
+            <Links to="/trending/1">View All</Links>
           </HeadingWrapper>
           <AnimeCards count={width <= 600 ? 7 : 15} criteria="airing" />
         </div>
@@ -82,7 +82,7 @@ function Home() {
             <Heading>
               <span>All Time</span> Popular
             </Heading>
-            <Links to="/popular">View All</Links>
+            <Links to="/popular/1">View All</Links>
           </HeadingWrapper>
           <AnimeCards count={width <= 600 ? 7 : 15} criteria="bypopularity" />
         </div>
@@ -91,7 +91,7 @@ function Home() {
             <Heading>
               <span>Top 100</span> Anime
             </Heading>
-            <Links to="/top100">View All</Links>
+            <Links to="/top100/1">View All</Links>
           </HeadingWrapper>
           <AnimeCards count={width <= 600 ? 7 : 15} criteria="all" />
         </div>
@@ -100,7 +100,7 @@ function Home() {
             <Heading>
               <span>All Time</span> Favourite
             </Heading>
-            <Links to="/favourites">View All</Links>
+            <Links to="/favourites/1">View All</Links>
           </HeadingWrapper>
           <AnimeCards count={width <= 600 ? 7 : 15} criteria="favorite" />
         </div>

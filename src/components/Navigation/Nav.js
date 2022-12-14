@@ -17,9 +17,9 @@ function Nav() {
           <img src="./assets/logo.svg" alt="Logo Here" />
         </Link>
         <div className="nav-links">
-          <Links to="/trending">Trending</Links>
-          <Links to="/popular">Popular</Links>
-          <Links to="/favourites">Favourites</Links>
+          <Links to="/trending/1">Trending</Links>
+          <Links to="/popular/1">Popular</Links>
+          <Links to="/favourites/1">Favourites</Links>
           <Links to="/movies">Top Movies</Links>
         </div>
 
@@ -75,7 +75,7 @@ const Shadow = styled.div`
 
 const Button = styled.button`
   color: white;
-  font-family: 'Lexend', sans-serif;
+  font-family: "Lexend", sans-serif;
   font-weight: 500;
   background-color: #7676ff;
   outline: none;

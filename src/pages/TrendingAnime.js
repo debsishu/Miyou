@@ -1,19 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SearchResultsSkeleton from "../components/skeletons/SearchResultsSkeleton";
 import { TrendingAnimeQuery } from "../hooks/searchQueryStrings";
 
 function TrendingAnime() {
+  let page = useParams().page;
   const [animeDetails, setAnimeDetails] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAnime();
-  }, []);
+  }, [page]);
 
   async function getAnime() {
+    setLoading(true);
     window.scrollTo(0, 0);
     const res = await axios({
       url: process.env.REACT_APP_BASE_URL,
@@ -25,7 +27,7 @@ function TrendingAnime() {
       data: {
         query: TrendingAnimeQuery,
         variables: {
-          page: 1,
+          page: page,
           perPage: 50,
         },
       },
@@ -56,11 +58,37 @@ function TrendingAnime() {
               </Links>
             ))}
           </CardWrapper>
+          <NavButtons>
+            {page > 1 && (
+              <NavButton to={"/trending/" + (parseInt(page) - 1)}>
+                Previous
+              </NavButton>
+            )}
+            <NavButton to={"/trending/" + (parseInt(page) + 1)}>Next</NavButton>
+          </NavButtons>
         </Parent>
       )}
     </div>
   );
 }
+
+const NavButtons = styled.div`
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+`;
+
+const NavButton = styled(Link)`
+  padding: 0.8rem 2rem;
+  text-decoration: none;
+  color: white;
+  background-color: none;
+  border: 2px solid #53507a;
+  border-radius: 0.5rem;
+`;
 
 const Parent = styled.div`
   margin: 2rem 5rem 2rem 5rem;

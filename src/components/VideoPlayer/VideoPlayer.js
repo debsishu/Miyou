@@ -10,7 +10,6 @@ import Hls from "hls.js";
 import plyr from "plyr";
 import "plyr/dist/plyr.css";
 import toast from "react-hot-toast";
-import { click } from "@testing-library/user-event/dist/click";
 
 function VideoPlayer({
   sources,

@@ -21,10 +21,10 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/popular" element={<PopularAnime />} />
-        <Route path="/trending" element={<TrendingAnime />} />
-        <Route path="/favourites" element={<FavouriteAnime />} />
-        <Route path="/top100" element={<Top100Anime />} />
+        <Route path="/popular/:page" element={<PopularAnime />} />
+        <Route path="/trending/:page" element={<TrendingAnime />} />
+        <Route path="/favourites/:page" element={<FavouriteAnime />} />
+        <Route path="/top100/:page" element={<Top100Anime />} />
         <Route path="/movies" element={<PopularMovies />} />
         <Route path="/search/:name" element={<SearchResults />} />
         <Route path="/category/:slug" element={<AnimeDetails />} />
