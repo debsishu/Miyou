@@ -330,7 +330,8 @@ function WatchAnimeV2() {
                             parseInt(episode) + 1
                           }`}
                           style={
-                            parseInt(episode) === episodeLinks.totalEpisodes
+                            parseInt(episode) ===
+                            parseInt(episodeLinks.totalEpisodes)
                               ? {
                                   pointerEvents: "none",
                                   color: "rgba(255,255,255, 0.2)",
@@ -358,7 +359,8 @@ function WatchAnimeV2() {
                             parseInt(episode) + 1
                           }`}
                           style={
-                            parseInt(episode) === episodeLinks.totalEpisodes
+                            parseInt(episode) ===
+                            parseInt(episodeLinks.totalEpisodes)
                               ? {
                                   pointerEvents: "none",
                                   color: "rgba(255,255,255, 0.2)",
@@ -376,18 +378,22 @@ function WatchAnimeV2() {
                 <EpisodesWrapper>
                   <p>Episodes</p>
                   <Episodes>
-                    {[...Array(episodeLinks.totalEpisodes)].map((x, i) => (
-                      <EpisodeLink
-                        to={`/play/${episodeLinks.animeId}/${parseInt(i) + 1}`}
-                        style={
-                          i + 1 <= parseInt(episode)
-                            ? { backgroundColor: "#7676ff" }
-                            : {}
-                        }
-                      >
-                        {i + 1}
-                      </EpisodeLink>
-                    ))}
+                    {[...Array(parseInt(episodeLinks.totalEpisodes))].map(
+                      (x, i) => (
+                        <EpisodeLink
+                          to={`/play/${episodeLinks.animeId}/${
+                            parseInt(i) + 1
+                          }`}
+                          style={
+                            i + 1 <= parseInt(episode)
+                              ? { backgroundColor: "#7676ff" }
+                              : {}
+                          }
+                        >
+                          {i + 1}
+                        </EpisodeLink>
+                      )
+                    )}
                   </Episodes>
                 </EpisodesWrapper>
               </VideoPlayerWrapper>
