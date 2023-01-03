@@ -6,6 +6,8 @@
 
 ## Miyou is an online anime streaming site built using React.js. [Visit Here](https://www.miyou.me/).
 
+### Next.js implementation of this web-app can be found [here.](https://github.com/reyangurjar/Miyou.me) Hosted [URL](https://miyou-topaz.vercel.app/)
+
 ### `npm i` (Install the dependencies)
 
 ### `npm start` (Run locally)
