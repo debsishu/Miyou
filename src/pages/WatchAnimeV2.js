@@ -16,6 +16,7 @@ import { searchByIdQuery } from "../hooks/searchQueryStrings";
 import toast from "react-hot-toast";
 
 function WatchAnimeV2() {
+  const mal_id = useParams().id;
   const slug = useParams().slug;
   const episode = useParams().episode;
 
@@ -45,7 +46,7 @@ function WatchAnimeV2() {
     updateLocalStorage(
       res.data.animeId,
       res.data.episodeNum,
-      res.data.mal_id,
+      mal_id,
       res.data.isDub
     );
     let aniRes = await axios({
@@ -58,16 +59,15 @@ function WatchAnimeV2() {
       data: {
         query: searchByIdQuery,
         variables: {
-          id: res.data.mal_id,
+          id: mal_id,
         },
       },
     }).catch((err) => {
       console.log(err);
     });
     setAnimeDetails(aniRes.data.data.Media);
-    document.title = `${aniRes.data.data.Media.title.userPreferred} ${
-      res.data.isDub ? "(Dub)" : "(Sub)"
-    } EP-${episode} - Miyou`;
+    document.title = `${aniRes.data.data.Media.title.userPreferred} ${res.data.isDub ? "(Dub)" : "(Sub)"
+      } EP-${episode} - Miyou`;
     setLoading(false);
   }
 
@@ -122,11 +122,10 @@ function WatchAnimeV2() {
               <div>
                 <Titles>
                   <p>
-                    <span>{`${
-                      animeDetails.title.english !== null
-                        ? animeDetails.title.english
-                        : animeDetails.title.userPreferred
-                    } ${episodeLinks.isDub ? "(Dub)" : "(Sub)"}`}</span>
+                    <span>{`${animeDetails.title.english !== null
+                      ? animeDetails.title.english
+                      : animeDetails.title.userPreferred
+                      } ${episodeLinks.isDub ? "(Dub)" : "(Sub)"}`}</span>
                     {` Episode - ${episode}`}
                   </p>
                   {width <= 600 && (
@@ -189,7 +188,7 @@ function WatchAnimeV2() {
                       type={episodeLinks.type}
                       internalPlayer={internalPlayer}
                       setInternalPlayer={setInternalPlayer}
-                      title={`${episodeLinks.mal_id}EP${episodeLinks.episodeNum}${episodeLinks.isDub}`}
+                      title={`${mal_id}EP${episodeLinks.episodeNum}${episodeLinks.isDub}`}
                       banner={animeDetails.bannerImage}
                       totalEpisodes={episodeLinks.totalEpisodes}
                       currentEpisode={episodeLinks.episodeNum}
@@ -271,15 +270,14 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) - 1
-                          }`}
+                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) - 1
+                            }`}
                           style={
                             parseInt(episode) === 1
                               ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
                               : {}
                           }
                         >
@@ -299,15 +297,14 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) - 1
-                          }`}
+                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) - 1
+                            }`}
                           style={
                             parseInt(episode) === 1
                               ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
                               : {}
                           }
                         >
@@ -326,16 +323,15 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) + 1
-                          }`}
+                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) + 1
+                            }`}
                           style={
                             parseInt(episode) ===
-                            parseInt(episodeLinks.totalEpisodes)
+                              parseInt(episodeLinks.totalEpisodes)
                               ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
                               : {}
                           }
                         >
@@ -355,16 +351,15 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(episode) + 1
-                          }`}
+                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) + 1
+                            }`}
                           style={
                             parseInt(episode) ===
-                            parseInt(episodeLinks.totalEpisodes)
+                              parseInt(episodeLinks.totalEpisodes)
                               ? {
-                                  pointerEvents: "none",
-                                  color: "rgba(255,255,255, 0.2)",
-                                }
+                                pointerEvents: "none",
+                                color: "rgba(255,255,255, 0.2)",
+                              }
                               : {}
                           }
                         >
@@ -381,9 +376,8 @@ function WatchAnimeV2() {
                     {[...Array(parseInt(episodeLinks.totalEpisodes))].map(
                       (x, i) => (
                         <EpisodeLink
-                          to={`/play/${episodeLinks.animeId}/${
-                            parseInt(i) + 1
-                          }`}
+                          to={`/play/${episodeLinks.animeId}/${parseInt(i) + 1
+                            }`}
                           style={
                             i + 1 <= parseInt(episode)
                               ? { backgroundColor: "#7676ff" }

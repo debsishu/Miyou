@@ -30,7 +30,7 @@ function App() {
         <Route path="/category/:slug" element={<AnimeDetails />} />
         <Route path="/watch/:episode" element={<WatchAnime />} />
         <Route path="/id/:id" element={<MalAnimeDetails />} />
-        <Route path="/play/:slug/:episode" element={<WatchAnimeV2 />} />
+        <Route path="/play/:id/:slug/:episode" element={<WatchAnimeV2 />} />
       </Routes>
       <Toaster
         toastOptions={{

@@ -80,13 +80,13 @@ function MalAnimeDetails() {
               <ContentWrapper>
                 <Poster>
                   <img src={anilistResponse.coverImage.extraLarge} alt="" />
-                  <Button to={`/play/${malResponse.subLink}/1`}>
+                  <Button to={`/play/${id}/${malResponse.subLink}/1`}>
                     Watch Sub
                   </Button>
                   {malResponse.isDub && (
                     <Button
                       className="outline"
-                      to={`/play/${malResponse.dubLink}/1`}
+                      to={`/play/${id}/${malResponse.dubLink}/1`}
                     >
                       Watch Dub
                     </Button>
@@ -180,7 +180,7 @@ function MalAnimeDetails() {
                       dub &&
                       [...Array(malResponse.dubTotalEpisodes)].map((x, i) => (
                         <EpisodeLink
-                          to={`/play/${malResponse.dubLink}/${parseInt(i) + 1}`}
+                          to={`/play/${id}/${malResponse.dubLink}/${parseInt(i) + 1}`}
                         >
                           Episode {i + 1}
                         </EpisodeLink>
@@ -189,7 +189,7 @@ function MalAnimeDetails() {
                     {!dub &&
                       [...Array(malResponse.subTotalEpisodes)].map((x, i) => (
                         <EpisodeLink
-                          to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
+                          to={`/play/${id}/${malResponse.subLink}/${parseInt(i) + 1}`}
                         >
                           Episode {i + 1}
                         </EpisodeLink>
@@ -202,7 +202,7 @@ function MalAnimeDetails() {
                       dub &&
                       [...Array(malResponse.dubTotalEpisodes)].map((x, i) => (
                         <EpisodeLink
-                          to={`/play/${malResponse.dubLink}/${parseInt(i) + 1}`}
+                          to={`/play/${id}/${malResponse.dubLink}/${parseInt(i) + 1}`}
                         >
                           {i + 1}
                         </EpisodeLink>
@@ -211,7 +211,7 @@ function MalAnimeDetails() {
                     {!dub &&
                       [...Array(malResponse.subTotalEpisodes)].map((x, i) => (
                         <EpisodeLink
-                          to={`/play/${malResponse.subLink}/${parseInt(i) + 1}`}
+                          to={`/play/${id}/${malResponse.subLink}/${parseInt(i) + 1}`}
                         >
                           {i + 1}
                         </EpisodeLink>
