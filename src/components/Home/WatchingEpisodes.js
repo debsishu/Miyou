@@ -131,7 +131,7 @@ function WatchingEpisodes() {
                 </IconContext.Provider>
 
                 <Link
-                  to={`play/${localData[i].animeId}/${localData[i].episode}`}
+                  to={`play/${localData[i].malId}/${localData[i].animeId}/${localData[i].episode}`}
                 >
                   <img src={item.coverImage.extraLarge} alt="" />
                 </Link>
