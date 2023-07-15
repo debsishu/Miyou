@@ -192,6 +192,7 @@ function WatchAnimeV2() {
                       banner={animeDetails.bannerImage}
                       totalEpisodes={episodeLinks.totalEpisodes}
                       currentEpisode={episodeLinks.episodeNum}
+                      malId={mal_id}
                     />
                   )}
                   {!internalPlayer && (
@@ -270,7 +271,7 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) - 1
+                          to={`/play/${mal_id}/${episodeLinks.animeId}/${parseInt(episode) - 1
                             }`}
                           style={
                             parseInt(episode) === 1
@@ -297,7 +298,7 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) - 1
+                          to={`/play/${mal_id}/${episodeLinks.animeId}/${parseInt(episode) - 1
                             }`}
                           style={
                             parseInt(episode) === 1
@@ -323,7 +324,7 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) + 1
+                          to={`/play/${mal_id}/${episodeLinks.animeId}/${parseInt(episode) + 1
                             }`}
                           style={
                             parseInt(episode) ===
@@ -351,7 +352,7 @@ function WatchAnimeV2() {
                         }}
                       >
                         <EpisodeLinks
-                          to={`/play/${episodeLinks.animeId}/${parseInt(episode) + 1
+                          to={`/play/${mal_id}/${episodeLinks.animeId}/${parseInt(episode) + 1
                             }`}
                           style={
                             parseInt(episode) ===
@@ -376,7 +377,7 @@ function WatchAnimeV2() {
                     {[...Array(parseInt(episodeLinks.totalEpisodes))].map(
                       (x, i) => (
                         <EpisodeLink
-                          to={`/play/${episodeLinks.animeId}/${parseInt(i) + 1
+                          to={`/play/${mal_id}/${episodeLinks.animeId}/${parseInt(i) + 1
                             }`}
                           style={
                             i + 1 <= parseInt(episode)

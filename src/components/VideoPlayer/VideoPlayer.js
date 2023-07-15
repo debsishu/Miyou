@@ -20,6 +20,7 @@ function VideoPlayer({
   banner,
   totalEpisodes,
   currentEpisode,
+  malId
 }) {
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -56,29 +57,29 @@ function VideoPlayer({
       controls:
         width > 600
           ? [
-              "play-large",
-              "rewind",
-              "play",
-              "fast-forward",
-              "progress",
-              "current-time",
-              "duration",
-              "mute",
-              "volume",
-              "settings",
-              "fullscreen",
-            ]
+            "play-large",
+            "rewind",
+            "play",
+            "fast-forward",
+            "progress",
+            "current-time",
+            "duration",
+            "mute",
+            "volume",
+            "settings",
+            "fullscreen",
+          ]
           : [
-              "play-large",
-              "rewind",
-              "play",
-              "fast-forward",
-              "progress",
-              "current-time",
-              "duration",
-              "settings",
-              "fullscreen",
-            ],
+            "play-large",
+            "rewind",
+            "play",
+            "fast-forward",
+            "progress",
+            "current-time",
+            "duration",
+            "settings",
+            "fullscreen",
+          ],
     };
 
     if (type === "mp4") {
@@ -101,7 +102,7 @@ function VideoPlayer({
       hls.loadSource(src);
       hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+      hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
         const availableQualities = hls.levels.map((l) => l.height);
         availableQualities.unshift(0);
         defaultOptions.quality = {
@@ -110,7 +111,7 @@ function VideoPlayer({
           forced: true,
           onChange: (e) => updateQuality(e),
         };
-        hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
+        hls.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
           var span = document.querySelector(
             ".plyr__menu__container [data-plyr='quality'][value='0'] span"
           );
@@ -126,7 +127,7 @@ function VideoPlayer({
         var button = document.createElement("button");
         button.classList.add("skip-button");
         button.innerHTML = "Skip Intro";
-        button.addEventListener("click", function () {
+        button.addEventListener("click", function() {
           player.forward(85);
         });
         player.on("ready", () => {
@@ -147,7 +148,7 @@ function VideoPlayer({
           function tapHandler(event) {
             if (!tapedTwice) {
               tapedTwice = true;
-              setTimeout(function () {
+              setTimeout(function() {
                 tapedTwice = false;
               }, 300);
               return false;
@@ -171,7 +172,7 @@ function VideoPlayer({
           window.screen.orientation.lock("portrait");
         });
 
-        player.on("timeupdate", function (e) {
+        player.on("timeupdate", function(e) {
           var time = player.currentTime,
             lastTime = localStorage.getItem(title);
           if (time > lastTime) {
@@ -179,7 +180,7 @@ function VideoPlayer({
           }
         });
 
-        player.on("ended", function () {
+        player.on("ended", function() {
           localStorage.removeItem(title);
           console.log(currentEpisode + " _ " + totalEpisodes);
           console.log(episode + " _ " + slug);
@@ -188,11 +189,11 @@ function VideoPlayer({
             localStorage.getItem("autoplay") === "true" &&
             parseInt(currentEpisode) !== parseInt(totalEpisodes)
           ) {
-            navigate(`/play/${slug}/${parseInt(episode) + 1}`);
+            navigate(`/play/${malId}/${slug}/${parseInt(episode) + 1}`);
           }
         });
 
-        player.on("play", function (e) {
+        player.on("play", function(e) {
           if (flag) {
             var lastTime = localStorage.getItem(title);
             if (lastTime !== null && lastTime > player.currentTime) {
@@ -246,7 +247,7 @@ function VideoPlayer({
       var button = document.createElement("button");
       button.classList.add("skip-button");
       button.innerHTML = "Skip Intro";
-      button.addEventListener("click", function () {
+      button.addEventListener("click", function() {
         player.forward(85);
       });
       player.on("ready", () => {
@@ -263,7 +264,7 @@ function VideoPlayer({
         window.screen.orientation.lock("portrait");
       });
 
-      player.on("timeupdate", function (e) {
+      player.on("timeupdate", function(e) {
         var time = player.currentTime,
           lastTime = localStorage.getItem(title);
         if (time > lastTime) {
@@ -274,7 +275,7 @@ function VideoPlayer({
         }
       });
 
-      player.on("play", function (e) {
+      player.on("play", function(e) {
         if (flag) {
           var lastTime = localStorage.getItem(title);
           if (lastTime !== null && lastTime > player.currentTime) {
